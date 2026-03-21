@@ -215,8 +215,12 @@ router.post("/jules-scan", async (req: Request, res: Response) => {
         body: JSON.stringify({
           title: `Security scan: ${repo.owner}/${repo.name}`,
           prompt,
-          source: `sources/github/${repo.owner}/${repo.name}`,
-          branch: "main",
+          sourceContext: {
+            source: `sources/github-${repo.owner}-${repo.name}`,
+            githubRepoContext: {
+              startingBranch: "main",
+            },
+          },
         }),
       });
 
