@@ -113,10 +113,10 @@ export default function Slide6PorQueAgora() {
                   OWASP
                 </div>
                 <div style={{ fontSize: "1.1vw", color: "hsl(0, 0%, 95%)", fontWeight: 400, marginTop: "0.5vh" }}>
-                  Top 10 — ainda sem solução para IA
+                  solução para GenAI lançada em fev/2026
                 </div>
                 <div style={{ fontSize: "1vw", color: "hsl(0, 0%, 55%)", marginTop: "0.5vh", fontWeight: 300 }}>
-                  padrões de vulnerabilidade idênticos há 5 anos
+                  padrões de segurança não acompanharam o crescimento da IA
                 </div>
               </div>
               <div
