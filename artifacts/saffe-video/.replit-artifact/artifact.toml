@@ -1,0 +1,31 @@
+kind = "video"
+previewPath = "/saffe-video/"
+title = "Saffe Presentation Animation"
+version = "1.0.0"
+id = "artifacts/saffe-video"
+router = "path"
+
+[[integratedSkills]]
+name = "video-js"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/saffe-video/" ]
+localPort = 22717
+
+[services.development]
+run = "pnpm --filter @workspace/saffe-video run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/saffe-video", "run", "build" ]
+publicDir = "artifacts/saffe-video/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22717"
+BASE_PATH = "/saffe-video/"
