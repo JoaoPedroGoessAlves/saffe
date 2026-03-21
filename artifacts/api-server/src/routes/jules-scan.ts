@@ -278,7 +278,7 @@ router.get("/jules-scan/:id", async (req: Request, res: Response) => {
     .from(julesAnalysesTable)
     .where(
       and(
-        eq(julesAnalysesTable.id, req.params.id),
+        eq(julesAnalysesTable.id, String(req.params.id)),
         eq(julesAnalysesTable.userId, req.user!.id)
       )
     );

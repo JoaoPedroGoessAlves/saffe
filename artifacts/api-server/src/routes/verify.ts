@@ -1,10 +1,43 @@
 import { Router, type IRouter, type Request, type Response } from "express";
 import crypto from "crypto";
+import dns from "dns/promises";
+import { isIP } from "net";
 import { db, domainVerificationsTable } from "@workspace/db";
 import { and, eq } from "drizzle-orm";
 import { InitDomainVerificationBody, ConfirmDomainVerificationBody } from "@workspace/api-zod";
 
 const router: IRouter = Router();
+
+function isPrivateIP(ip: string): boolean {
+  const parts = ip.split(".").map(Number);
+  if (parts.length === 4 && parts.every((p) => !isNaN(p))) {
+    const [a, b] = parts;
+    if (a === 10) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 127) return true;
+    if (a === 169 && b === 254) return true;
+    if (a === 0) return true;
+  }
+  const lower = ip.toLowerCase();
+  if (lower === "::1") return true;
+  if (lower.startsWith("fe80:")) return true;
+  if (lower.startsWith("fc") || lower.startsWith("fd")) return true;
+  return false;
+}
+
+async function assertPublicHost(hostname: string): Promise<void> {
+  if (isIP(hostname)) {
+    if (isPrivateIP(hostname)) throw new Error(`SSRF blocked: private IP ${hostname}`);
+    return;
+  }
+  const addresses = await dns.lookup(hostname, { all: true });
+  for (const { address } of addresses) {
+    if (isPrivateIP(address)) {
+      throw new Error(`SSRF blocked: ${hostname} resolves to private IP ${address}`);
+    }
+  }
+}
 
 function extractDomain(url: string): string | null {
   try {
@@ -17,6 +50,8 @@ function extractDomain(url: string): string | null {
 
 async function checkMetaTag(url: string, token: string): Promise<boolean> {
   try {
+    const parsed = new URL(url);
+    await assertPublicHost(parsed.hostname);
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 10000);
     const response = await fetch(url, {

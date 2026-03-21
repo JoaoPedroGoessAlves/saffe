@@ -181,7 +181,7 @@ router.get("/cost-analysis/:analysisId", async (req: Request, res: Response) => 
     return;
   }
 
-  const { analysisId } = req.params;
+  const analysisId = String(req.params.analysisId);
   const userId = req.user!.id;
 
   const [analysis] = await db

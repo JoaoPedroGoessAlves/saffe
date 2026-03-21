@@ -1,3 +1,5 @@
+import dns from "dns/promises";
+import { isIP } from "net";
 import type { InsertScanResult } from "@workspace/db";
 
 export interface ScanCheck {
@@ -22,8 +24,50 @@ interface FetchResult {
   error?: string;
 }
 
+function isPrivateIP(ip: string): boolean {
+  const parts = ip.split(".").map(Number);
+  if (parts.length === 4 && parts.every((p) => !isNaN(p))) {
+    const [a, b] = parts;
+    if (a === 10) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 127) return true;
+    if (a === 169 && b === 254) return true;
+    if (a === 0) return true;
+    if (a === 100 && b >= 64 && b <= 127) return true;
+  }
+  const lower = ip.toLowerCase();
+  if (lower === "::1") return true;
+  if (lower.startsWith("fe80:")) return true;
+  if (lower.startsWith("fc") || lower.startsWith("fd")) return true;
+  return false;
+}
+
+async function assertPublicHost(hostname: string): Promise<void> {
+  if (isIP(hostname)) {
+    if (isPrivateIP(hostname)) {
+      throw new Error(`SSRF blocked: private IP ${hostname}`);
+    }
+    return;
+  }
+  let addresses: { address: string }[];
+  try {
+    addresses = await dns.lookup(hostname, { all: true });
+  } catch {
+    throw new Error(`Could not resolve hostname: ${hostname}`);
+  }
+  for (const { address } of addresses) {
+    if (isPrivateIP(address)) {
+      throw new Error(`SSRF blocked: ${hostname} resolves to private IP ${address}`);
+    }
+  }
+}
+
 async function fetchUrl(url: string, timeout = 10000): Promise<FetchResult | null> {
   try {
+    const parsed = new URL(url);
+    await assertPublicHost(parsed.hostname);
+
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeout);
 
@@ -77,6 +121,8 @@ async function fetchUrl(url: string, timeout = 10000): Promise<FetchResult | nul
 async function checkSensitiveFile(baseUrl: string, path: string): Promise<{ accessible: boolean; status: number }> {
   try {
     const url = new URL(path, baseUrl).href;
+    const parsed = new URL(url);
+    await assertPublicHost(parsed.hostname);
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 5000);
     const response = await fetch(url, {
@@ -93,6 +139,121 @@ async function checkSensitiveFile(baseUrl: string, path: string): Promise<{ acce
   } catch {
     return { accessible: false, status: 0 };
   }
+}
+
+function extractScriptSrcs(html: string, baseUrl: string): string[] {
+  const urls: string[] = [];
+  const regex = /<script[^>]+src\s*=\s*["']([^"']+)["'][^>]*>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(html)) !== null) {
+    const src = match[1];
+    if (!src) continue;
+    try {
+      const resolved = new URL(src, baseUrl).href;
+      if (resolved.startsWith("http://") || resolved.startsWith("https://")) {
+        urls.push(resolved);
+      }
+    } catch {
+    }
+  }
+  return [...new Set(urls)];
+}
+
+async function fetchJsBundle(url: string, timeout = 8000, maxBytes = 2 * 1024 * 1024): Promise<string | null> {
+  try {
+    const parsed = new URL(url);
+    await assertPublicHost(parsed.hostname);
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { "User-Agent": "Saffe-Security-Scanner/1.0" },
+    });
+
+    clearTimeout(timer);
+
+    if (!response.ok) return null;
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!contentType.includes("javascript") && !contentType.includes("text/") && !url.endsWith(".js")) {
+      return null;
+    }
+
+    const buffer = await response.arrayBuffer();
+    if (buffer.byteLength > maxBytes) {
+      return new TextDecoder().decode(buffer.slice(0, maxBytes));
+    }
+    return new TextDecoder().decode(buffer);
+  } catch {
+    return null;
+  }
+}
+
+async function scanJsBundles(html: string, baseUrl: string): Promise<ScanCheck> {
+  const scriptUrls = extractScriptSrcs(html, baseUrl);
+  if (scriptUrls.length === 0) {
+    return {
+      checkType: "js_bundles",
+      severity: "info",
+      title: "Bundles JS: Nenhum detectado",
+      description: "Nenhum arquivo JavaScript externo foi detectado na página.",
+      passed: true,
+    };
+  }
+
+  const patterns = [
+    { regex: /api[_-]?key\s*[:=]\s*["']?[a-zA-Z0-9\-_]{10,}["']?/gi, name: "API Key" },
+    { regex: /secret\s*[:=]\s*["']?[a-zA-Z0-9\-_]{10,}["']?/gi, name: "Secret" },
+    { regex: /Bearer\s+[a-zA-Z0-9\-_\.]{20,}/gi, name: "Bearer Token" },
+    { regex: /password\s*[:=]\s*["']?[^\s"']{6,}["']?/gi, name: "Password" },
+    { regex: /private[_-]?key\s*[:=]\s*["']?[a-zA-Z0-9\-_]{10,}["']?/gi, name: "Private Key" },
+    { regex: /access[_-]?token\s*[:=]\s*["']?[a-zA-Z0-9\-_\.]{20,}["']?/gi, name: "Access Token" },
+    { regex: /database[_-]?url\s*[:=]\s*["']?[a-zA-Z0-9\-_\/:\.@]{10,}["']?/gi, name: "Database URL" },
+    { regex: /OPENAI_API_KEY/gi, name: "OpenAI API Key" },
+    { regex: /sk-[a-zA-Z0-9]{20,}/g, name: "Possible OpenAI Key" },
+    { regex: /SUPABASE_[A-Z_]*KEY\s*[:=]\s*["']?[a-zA-Z0-9\-_\.]{20,}["']?/gi, name: "Supabase Key" },
+    { regex: /eyJ[a-zA-Z0-9\-_]{10,}\.[a-zA-Z0-9\-_]{10,}\.[a-zA-Z0-9\-_]{10,}/g, name: "JWT Token" },
+  ];
+
+  const bundleFindings: string[] = [];
+  const scanned: string[] = [];
+
+  await Promise.all(
+    scriptUrls.slice(0, 10).map(async (url) => {
+      const content = await fetchJsBundle(url, 8000);
+      if (!content) return;
+      const filename = new URL(url).pathname.split("/").pop() ?? url;
+      scanned.push(filename);
+      for (const { regex, name } of patterns) {
+        regex.lastIndex = 0;
+        if (regex.test(content)) {
+          bundleFindings.push(`${name} em ${filename}`);
+        }
+      }
+    })
+  );
+
+  if (bundleFindings.length > 0) {
+    return {
+      checkType: "js_bundles",
+      severity: "critical",
+      title: "Segredos Expostos em Bundles JavaScript",
+      description: `Foram encontrados padrões sensíveis nos arquivos JavaScript públicos do seu site. Qualquer visitante pode inspecionar esses arquivos no navegador.`,
+      details: `Encontrados: ${bundleFindings.join("; ")}`,
+      fixSuggestion: "URGENTE: Remova todas as credenciais do código frontend. Use variáveis de ambiente apenas no servidor (backend) e crie endpoints de API para operações que precisam de credenciais.",
+      vibePrompt: `Segredos foram encontrados nos meus bundles JavaScript públicos: ${bundleFindings.join(", ")}. Preciso mover essas credenciais para o backend e remover completamente do código frontend.`,
+      passed: false,
+    };
+  }
+
+  return {
+    checkType: "js_bundles",
+    severity: "info",
+    title: `Bundles JS: Nenhum Segredo Detectado (${scanned.length} arquivo${scanned.length !== 1 ? "s" : ""} verificado${scanned.length !== 1 ? "s" : ""})`,
+    description: `Foram verificados ${scanned.length} arquivo(s) JavaScript e nenhum padrão de segredos foi encontrado.`,
+    passed: true,
+  };
 }
 
 function checkHttps(result: FetchResult): ScanCheck {
@@ -469,7 +630,14 @@ export async function runSecurityScan(url: string): Promise<{
   checks.push(checkCors(result.headers));
   checks.push(...checkCookies(result.cookies));
   checks.push(checkSensitivePatterns(result.body));
-  checks.push(await checkSensitiveFiles(url));
+
+  const [sensitiveFilesCheck, jsBundlesCheck] = await Promise.all([
+    checkSensitiveFiles(url),
+    scanJsBundles(result.body, result.finalUrl),
+  ]);
+
+  checks.push(sensitiveFilesCheck);
+  checks.push(jsBundlesCheck);
 
   const riskLevel = calculateRiskLevel(checks);
   return { checks, riskLevel };
