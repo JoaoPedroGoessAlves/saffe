@@ -72,6 +72,18 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      "/saffe-pitch": {
+        target: "http://localhost:19801",
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      "/saffe-video": {
+        target: "http://localhost:22717",
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
     },
   },
   preview: {
