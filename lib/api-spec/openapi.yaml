@@ -16,6 +16,10 @@ tags:
     description: Domain ownership verification
   - name: scans
     description: Security scan operations
+  - name: github-verification
+    description: GitHub repository ownership verification
+  - name: cost-analysis
+    description: Dev cost estimation via SCC analysis
 
 components:
   parameters:
@@ -268,6 +272,102 @@ components:
           type: boolean
         message:
           type: string
+
+    InitGithubVerificationRequest:
+      type: object
+      required: [repoUrl]
+      properties:
+        repoUrl:
+          type: string
+          format: uri
+
+    InitGithubVerificationResponse:
+      type: object
+      required: [repoUrl, repoSlug, token, instructions]
+      properties:
+        repoUrl:
+          type: string
+        repoSlug:
+          type: string
+        token:
+          type: string
+        instructions:
+          type: string
+        alreadyVerified:
+          type: boolean
+
+    ConfirmGithubVerificationRequest:
+      type: object
+      required: [repoSlug]
+      properties:
+        repoSlug:
+          type: string
+
+    ConfirmGithubVerificationResponse:
+      type: object
+      required: [verified, repoSlug]
+      properties:
+        verified:
+          type: boolean
+        repoSlug:
+          type: string
+        message:
+          type: string
+
+    LanguageCostBreakdown:
+      type: object
+      required: [language, lines, complexity, estimatedCost, estimatedHours]
+      properties:
+        language:
+          type: string
+        lines:
+          type: number
+        complexity:
+          type: number
+        estimatedCost:
+          type: number
+        estimatedHours:
+          type: number
+
+    CreateCostAnalysisRequest:
+      type: object
+      required: [repoSlug]
+      properties:
+        repoSlug:
+          type: string
+
+    CostAnalysis:
+      type: object
+      required: [id, repoUrl, repoSlug, totalCost, totalHours, totalLines, languageBreakdown, createdAt]
+      properties:
+        id:
+          type: string
+        repoUrl:
+          type: string
+        repoSlug:
+          type: string
+        totalCost:
+          type: number
+        totalHours:
+          type: number
+        totalLines:
+          type: number
+        languageBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/LanguageCostBreakdown'
+        createdAt:
+          type: string
+          format: date-time
+
+    ListCostAnalysesResponse:
+      type: object
+      required: [analyses]
+      properties:
+        analyses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostAnalysis'
 
 paths:
   /healthz:
@@ -584,6 +684,162 @@ paths:
                 $ref: '#/components/schemas/ErrorEnvelope'
         '404':
           description: Scan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+  /github-verify/init:
+    post:
+      tags: [github-verification]
+      operationId: initGithubVerification
+      summary: Initialize GitHub repository ownership verification
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitGithubVerificationRequest'
+      responses:
+        '200':
+          description: Verification token generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitGithubVerificationResponse'
+        '400':
+          description: Invalid repo URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+  /github-verify/confirm:
+    post:
+      tags: [github-verification]
+      operationId: confirmGithubVerification
+      summary: Confirm GitHub repo ownership by checking saffe-verify.txt
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmGithubVerificationRequest'
+      responses:
+        '200':
+          description: Verification status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfirmGithubVerificationResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '404':
+          description: Verification not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+  /cost-analysis:
+    get:
+      tags: [cost-analysis]
+      operationId: listCostAnalyses
+      summary: List all cost analyses for the current user
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+      responses:
+        '200':
+          description: List of cost analyses
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCostAnalysesResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+    post:
+      tags: [cost-analysis]
+      operationId: createCostAnalysis
+      summary: Run SCC analysis on a verified GitHub repository
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCostAnalysisRequest'
+      responses:
+        '201':
+          description: Cost analysis created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostAnalysis'
+        '400':
+          description: Repository not verified or analysis failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+  /cost-analysis/{analysisId}:
+    get:
+      tags: [cost-analysis]
+      operationId: getCostAnalysis
+      summary: Get a specific cost analysis
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+        - name: analysisId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cost analysis details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostAnalysis'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '404':
+          description: Cost analysis not found
           content:
             application/json:
               schema:

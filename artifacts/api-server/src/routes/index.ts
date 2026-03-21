@@ -3,6 +3,8 @@ import healthRouter from "./health";
 import authRouter from "./auth";
 import verifyRouter from "./verify";
 import scansRouter from "./scans";
+import githubVerifyRouter from "./github-verify";
+import costAnalysisRouter from "./cost-analysis";
 
 const router: IRouter = Router();
 
@@ -10,5 +12,7 @@ router.use(healthRouter);
 router.use(authRouter);
 router.use(verifyRouter);
 router.use(scansRouter);
+router.use(githubVerifyRouter);
+router.use(costAnalysisRouter);
 
 export default router;

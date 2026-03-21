@@ -273,3 +273,125 @@ export const SendScanReportResponse = zod.object({
   success: zod.boolean(),
   message: zod.string().optional(),
 });
+
+/**
+ * @summary Initialize GitHub repository ownership verification
+ */
+export const InitGithubVerificationHeader = zod.object({
+  Authorization: zod
+    .string()
+    .optional()
+    .describe("Opaque session token — `Bearer <sid>`."),
+});
+
+export const InitGithubVerificationBody = zod.object({
+  repoUrl: zod.string().url(),
+});
+
+export const InitGithubVerificationResponse = zod.object({
+  repoUrl: zod.string(),
+  repoSlug: zod.string(),
+  token: zod.string(),
+  instructions: zod.string(),
+  alreadyVerified: zod.boolean().optional(),
+});
+
+/**
+ * @summary Confirm GitHub repo ownership by checking saffe-verify.txt
+ */
+export const ConfirmGithubVerificationHeader = zod.object({
+  Authorization: zod
+    .string()
+    .optional()
+    .describe("Opaque session token — `Bearer <sid>`."),
+});
+
+export const ConfirmGithubVerificationBody = zod.object({
+  repoSlug: zod.string(),
+});
+
+export const ConfirmGithubVerificationResponse = zod.object({
+  verified: zod.boolean(),
+  repoSlug: zod.string(),
+  message: zod.string().optional(),
+});
+
+/**
+ * @summary List all cost analyses for the current user
+ */
+export const ListCostAnalysesHeader = zod.object({
+  Authorization: zod
+    .string()
+    .optional()
+    .describe("Opaque session token — `Bearer <sid>`."),
+});
+
+export const ListCostAnalysesResponse = zod.object({
+  analyses: zod.array(
+    zod.object({
+      id: zod.string(),
+      repoUrl: zod.string(),
+      repoSlug: zod.string(),
+      totalCost: zod.number(),
+      totalHours: zod.number(),
+      totalLines: zod.number(),
+      languageBreakdown: zod.array(
+        zod.object({
+          language: zod.string(),
+          lines: zod.number(),
+          complexity: zod.number(),
+          estimatedCost: zod.number(),
+          estimatedHours: zod.number(),
+        }),
+      ),
+      createdAt: zod.date(),
+    }),
+  ),
+});
+
+/**
+ * @summary Run SCC analysis on a verified GitHub repository
+ */
+export const CreateCostAnalysisHeader = zod.object({
+  Authorization: zod
+    .string()
+    .optional()
+    .describe("Opaque session token — `Bearer <sid>`."),
+});
+
+export const CreateCostAnalysisBody = zod.object({
+  repoSlug: zod.string(),
+});
+
+/**
+ * @summary Get a specific cost analysis
+ */
+export const GetCostAnalysisParams = zod.object({
+  analysisId: zod.coerce.string(),
+});
+
+export const GetCostAnalysisHeader = zod.object({
+  Authorization: zod
+    .string()
+    .optional()
+    .describe("Opaque session token — `Bearer <sid>`."),
+});
+
+export const GetCostAnalysisResponse = zod.object({
+  id: zod.string(),
+  repoUrl: zod.string(),
+  repoSlug: zod.string(),
+  totalCost: zod.number(),
+  totalHours: zod.number(),
+  totalLines: zod.number(),
+  languageBreakdown: zod.array(
+    zod.object({
+      language: zod.string(),
+      lines: zod.number(),
+      complexity: zod.number(),
+      estimatedCost: zod.number(),
+      estimatedHours: zod.number(),
+    }),
+  ),
+  createdAt: zod.date(),
+});

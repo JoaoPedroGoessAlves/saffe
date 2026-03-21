@@ -19,15 +19,22 @@ import type {
 import type {
   AuthUserEnvelope,
   BeginBrowserLoginParams,
+  ConfirmGithubVerificationRequest,
+  ConfirmGithubVerificationResponse,
   ConfirmVerificationRequest,
   ConfirmVerificationResponse,
+  CostAnalysis,
+  CreateCostAnalysisRequest,
   CreateScanRequest,
   CreateScanResponse,
   ErrorEnvelope,
   HandleBrowserLoginCallbackParams,
   HealthStatus,
+  InitGithubVerificationRequest,
+  InitGithubVerificationResponse,
   InitVerificationRequest,
   InitVerificationResponse,
+  ListCostAnalysesResponse,
   ListScansResponse,
   LogoutSuccess,
   MobileTokenExchangeRequest,
@@ -1139,3 +1146,433 @@ export const useSendScanReport = <
 > => {
   return useMutation(getSendScanReportMutationOptions(options));
 };
+
+/**
+ * @summary Initialize GitHub repository ownership verification
+ */
+export const getInitGithubVerificationUrl = () => {
+  return `/api/github-verify/init`;
+};
+
+export const initGithubVerification = async (
+  initGithubVerificationRequest: InitGithubVerificationRequest,
+  options?: RequestInit,
+): Promise<InitGithubVerificationResponse> => {
+  return customFetch<InitGithubVerificationResponse>(
+    getInitGithubVerificationUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(initGithubVerificationRequest),
+    },
+  );
+};
+
+export const getInitGithubVerificationMutationOptions = <
+  TError = ErrorType<ErrorEnvelope>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof initGithubVerification>>,
+    TError,
+    { data: BodyType<InitGithubVerificationRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof initGithubVerification>>,
+  TError,
+  { data: BodyType<InitGithubVerificationRequest> },
+  TContext
+> => {
+  const mutationKey = ["initGithubVerification"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof initGithubVerification>>,
+    { data: BodyType<InitGithubVerificationRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return initGithubVerification(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type InitGithubVerificationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof initGithubVerification>>
+>;
+export type InitGithubVerificationMutationBody =
+  BodyType<InitGithubVerificationRequest>;
+export type InitGithubVerificationMutationError = ErrorType<ErrorEnvelope>;
+
+/**
+ * @summary Initialize GitHub repository ownership verification
+ */
+export const useInitGithubVerification = <
+  TError = ErrorType<ErrorEnvelope>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof initGithubVerification>>,
+    TError,
+    { data: BodyType<InitGithubVerificationRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof initGithubVerification>>,
+  TError,
+  { data: BodyType<InitGithubVerificationRequest> },
+  TContext
+> => {
+  return useMutation(getInitGithubVerificationMutationOptions(options));
+};
+
+/**
+ * @summary Confirm GitHub repo ownership by checking saffe-verify.txt
+ */
+export const getConfirmGithubVerificationUrl = () => {
+  return `/api/github-verify/confirm`;
+};
+
+export const confirmGithubVerification = async (
+  confirmGithubVerificationRequest: ConfirmGithubVerificationRequest,
+  options?: RequestInit,
+): Promise<ConfirmGithubVerificationResponse> => {
+  return customFetch<ConfirmGithubVerificationResponse>(
+    getConfirmGithubVerificationUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(confirmGithubVerificationRequest),
+    },
+  );
+};
+
+export const getConfirmGithubVerificationMutationOptions = <
+  TError = ErrorType<ErrorEnvelope>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof confirmGithubVerification>>,
+    TError,
+    { data: BodyType<ConfirmGithubVerificationRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof confirmGithubVerification>>,
+  TError,
+  { data: BodyType<ConfirmGithubVerificationRequest> },
+  TContext
+> => {
+  const mutationKey = ["confirmGithubVerification"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof confirmGithubVerification>>,
+    { data: BodyType<ConfirmGithubVerificationRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return confirmGithubVerification(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ConfirmGithubVerificationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof confirmGithubVerification>>
+>;
+export type ConfirmGithubVerificationMutationBody =
+  BodyType<ConfirmGithubVerificationRequest>;
+export type ConfirmGithubVerificationMutationError = ErrorType<ErrorEnvelope>;
+
+/**
+ * @summary Confirm GitHub repo ownership by checking saffe-verify.txt
+ */
+export const useConfirmGithubVerification = <
+  TError = ErrorType<ErrorEnvelope>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof confirmGithubVerification>>,
+    TError,
+    { data: BodyType<ConfirmGithubVerificationRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof confirmGithubVerification>>,
+  TError,
+  { data: BodyType<ConfirmGithubVerificationRequest> },
+  TContext
+> => {
+  return useMutation(getConfirmGithubVerificationMutationOptions(options));
+};
+
+/**
+ * @summary List all cost analyses for the current user
+ */
+export const getListCostAnalysesUrl = () => {
+  return `/api/cost-analysis`;
+};
+
+export const listCostAnalyses = async (
+  options?: RequestInit,
+): Promise<ListCostAnalysesResponse> => {
+  return customFetch<ListCostAnalysesResponse>(getListCostAnalysesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListCostAnalysesQueryKey = () => {
+  return [`/api/cost-analysis`] as const;
+};
+
+export const getListCostAnalysesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listCostAnalyses>>,
+  TError = ErrorType<ErrorEnvelope>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listCostAnalyses>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListCostAnalysesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listCostAnalyses>>
+  > = ({ signal }) => listCostAnalyses({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listCostAnalyses>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListCostAnalysesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listCostAnalyses>>
+>;
+export type ListCostAnalysesQueryError = ErrorType<ErrorEnvelope>;
+
+/**
+ * @summary List all cost analyses for the current user
+ */
+
+export function useListCostAnalyses<
+  TData = Awaited<ReturnType<typeof listCostAnalyses>>,
+  TError = ErrorType<ErrorEnvelope>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listCostAnalyses>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListCostAnalysesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Run SCC analysis on a verified GitHub repository
+ */
+export const getCreateCostAnalysisUrl = () => {
+  return `/api/cost-analysis`;
+};
+
+export const createCostAnalysis = async (
+  createCostAnalysisRequest: CreateCostAnalysisRequest,
+  options?: RequestInit,
+): Promise<CostAnalysis> => {
+  return customFetch<CostAnalysis>(getCreateCostAnalysisUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createCostAnalysisRequest),
+  });
+};
+
+export const getCreateCostAnalysisMutationOptions = <
+  TError = ErrorType<ErrorEnvelope>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createCostAnalysis>>,
+    TError,
+    { data: BodyType<CreateCostAnalysisRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createCostAnalysis>>,
+  TError,
+  { data: BodyType<CreateCostAnalysisRequest> },
+  TContext
+> => {
+  const mutationKey = ["createCostAnalysis"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createCostAnalysis>>,
+    { data: BodyType<CreateCostAnalysisRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createCostAnalysis(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateCostAnalysisMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createCostAnalysis>>
+>;
+export type CreateCostAnalysisMutationBody =
+  BodyType<CreateCostAnalysisRequest>;
+export type CreateCostAnalysisMutationError = ErrorType<ErrorEnvelope>;
+
+/**
+ * @summary Run SCC analysis on a verified GitHub repository
+ */
+export const useCreateCostAnalysis = <
+  TError = ErrorType<ErrorEnvelope>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createCostAnalysis>>,
+    TError,
+    { data: BodyType<CreateCostAnalysisRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createCostAnalysis>>,
+  TError,
+  { data: BodyType<CreateCostAnalysisRequest> },
+  TContext
+> => {
+  return useMutation(getCreateCostAnalysisMutationOptions(options));
+};
+
+/**
+ * @summary Get a specific cost analysis
+ */
+export const getGetCostAnalysisUrl = (analysisId: string) => {
+  return `/api/cost-analysis/${analysisId}`;
+};
+
+export const getCostAnalysis = async (
+  analysisId: string,
+  options?: RequestInit,
+): Promise<CostAnalysis> => {
+  return customFetch<CostAnalysis>(getGetCostAnalysisUrl(analysisId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetCostAnalysisQueryKey = (analysisId: string) => {
+  return [`/api/cost-analysis/${analysisId}`] as const;
+};
+
+export const getGetCostAnalysisQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCostAnalysis>>,
+  TError = ErrorType<ErrorEnvelope>,
+>(
+  analysisId: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getCostAnalysis>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCostAnalysisQueryKey(analysisId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCostAnalysis>>> = ({
+    signal,
+  }) => getCostAnalysis(analysisId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!analysisId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCostAnalysis>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCostAnalysisQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCostAnalysis>>
+>;
+export type GetCostAnalysisQueryError = ErrorType<ErrorEnvelope>;
+
+/**
+ * @summary Get a specific cost analysis
+ */
+
+export function useGetCostAnalysis<
+  TData = Awaited<ReturnType<typeof getCostAnalysis>>,
+  TError = ErrorType<ErrorEnvelope>,
+>(
+  analysisId: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getCostAnalysis>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCostAnalysisQueryOptions(analysisId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}

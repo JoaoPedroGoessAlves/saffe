@@ -169,6 +169,55 @@ export interface SendReportEmailResponse {
   message?: string;
 }
 
+export interface InitGithubVerificationRequest {
+  repoUrl: string;
+}
+
+export interface InitGithubVerificationResponse {
+  repoUrl: string;
+  repoSlug: string;
+  token: string;
+  instructions: string;
+  alreadyVerified?: boolean;
+}
+
+export interface ConfirmGithubVerificationRequest {
+  repoSlug: string;
+}
+
+export interface ConfirmGithubVerificationResponse {
+  verified: boolean;
+  repoSlug: string;
+  message?: string;
+}
+
+export interface LanguageCostBreakdown {
+  language: string;
+  lines: number;
+  complexity: number;
+  estimatedCost: number;
+  estimatedHours: number;
+}
+
+export interface CreateCostAnalysisRequest {
+  repoSlug: string;
+}
+
+export interface CostAnalysis {
+  id: string;
+  repoUrl: string;
+  repoSlug: string;
+  totalCost: number;
+  totalHours: number;
+  totalLines: number;
+  languageBreakdown: LanguageCostBreakdown[];
+  createdAt: string;
+}
+
+export interface ListCostAnalysesResponse {
+  analyses: CostAnalysis[];
+}
+
 /**
  * Opaque session token — `Bearer <sid>`.
  */
