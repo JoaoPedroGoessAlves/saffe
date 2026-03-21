@@ -1,28 +1,28 @@
 export default function Slide1Capa() {
-  const blue = "hsl(212, 100%, 44%)";
-  const blueLight = "rgba(0, 112, 224, 0.08)";
-  const blueMid = "rgba(0, 112, 224, 0.18)";
-  const blueBorder = "rgba(0, 112, 224, 0.25)";
+  const blue = "hsl(212, 100%, 56%)";
+  const blueLight = "rgba(30, 144, 255, 0.10)";
+  const blueMid = "rgba(30, 144, 255, 0.18)";
+  const blueBorder = "rgba(30, 144, 255, 0.28)";
 
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: "#ffffff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+      style={{ background: "#121212", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
     >
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,112,224,0.10) 0%, transparent 70%)",
+            "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(30,144,255,0.12) 0%, transparent 70%)",
         }}
       />
       <div
         className="absolute bottom-0 left-0 w-full"
-        style={{ height: "2px", background: blue }}
+        style={{ height: "2px", background: "#2997ff" }}
       />
       <div
         className="absolute top-0 left-0 h-full"
-        style={{ width: "4px", background: blue }}
+        style={{ width: "4px", background: "#2997ff" }}
       />
 
       <div className="relative flex h-full flex-col justify-between px-[8vw] py-[8vh]">
@@ -54,7 +54,7 @@ export default function Slide1Capa() {
                 fontSize: "2.2vw",
                 fontWeight: 300,
                 letterSpacing: "-0.04em",
-                color: "#1c1c1e",
+                color: "hsl(0, 0%, 95%)",
               }}
             >
               Saffe
@@ -81,7 +81,7 @@ export default function Slide1Capa() {
           <div
             style={{
               fontSize: "1.1vw",
-              color: "#8e8e93",
+              color: "hsl(0, 0%, 55%)",
               letterSpacing: "0.2em",
               textTransform: "uppercase",
               fontWeight: 400,
@@ -96,7 +96,7 @@ export default function Slide1Capa() {
               fontWeight: 200,
               letterSpacing: "-0.06em",
               lineHeight: 0.9,
-              color: "#1c1c1e",
+              color: "hsl(0, 0%, 95%)",
               margin: 0,
             }}
           >
@@ -116,7 +116,7 @@ export default function Slide1Capa() {
           <p
             style={{
               fontSize: "1.5vw",
-              color: "#636366",
+              color: "hsl(0, 0%, 55%)",
               fontWeight: 300,
               marginTop: "1.5vh",
               maxWidth: "45vw",
@@ -130,7 +130,7 @@ export default function Slide1Capa() {
         <div
           style={{
             fontSize: "1.1vw",
-            color: "#8e8e93",
+            color: "hsl(0, 0%, 55%)",
             fontWeight: 300,
           }}
         >

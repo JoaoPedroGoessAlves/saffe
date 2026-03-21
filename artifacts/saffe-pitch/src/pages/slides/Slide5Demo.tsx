@@ -1,18 +1,18 @@
 export default function Slide5Demo() {
-  const blue = "hsl(212, 100%, 44%)";
-  const blueLight = "rgba(0, 112, 224, 0.08)";
-  const blueBorder = "rgba(0, 112, 224, 0.20)";
+  const blue = "hsl(212, 100%, 56%)";
+  const blueLight = "rgba(30, 144, 255, 0.10)";
+  const blueBorder = "rgba(30, 144, 255, 0.22)";
 
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: "#f5f5f7", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+      style={{ background: "#121212", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
     >
       <div
         className="absolute inset-0"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,112,224,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,112,224,0.04) 1px, transparent 1px)",
+            "linear-gradient(rgba(30,144,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(30,144,255,0.05) 1px, transparent 1px)",
           backgroundSize: "8vw 8vh",
         }}
       />
@@ -20,7 +20,7 @@ export default function Slide5Demo() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,112,224,0.06) 0%, transparent 65%)",
+            "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(30,144,255,0.08) 0%, transparent 65%)",
         }}
       />
 
@@ -39,11 +39,11 @@ export default function Slide5Demo() {
 
         <div
           style={{
-            background: "rgba(255,255,255,0.85)",
+            background: "rgba(255,255,255,0.05)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
-            border: `1px solid rgba(0,0,0,0.08)`,
-            boxShadow: "0 8px 32px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)",
+            border: `1px solid rgba(255,255,255,0.10)`,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.50), 0 1px 4px rgba(0,0,0,0.30)",
             padding: "4vh 6vw",
             textAlign: "center",
             position: "relative",
@@ -88,7 +88,7 @@ export default function Slide5Demo() {
               fontSize: "6vw",
               fontWeight: 200,
               letterSpacing: "-0.05em",
-              color: "#1c1c1e",
+              color: "hsl(0, 0%, 95%)",
               lineHeight: 1,
               margin: 0,
             }}
@@ -98,7 +98,7 @@ export default function Slide5Demo() {
           <p
             style={{
               fontSize: "1.4vw",
-              color: "#8e8e93",
+              color: "hsl(0, 0%, 55%)",
               marginTop: "2vh",
               letterSpacing: "0.04em",
               fontWeight: 300,
@@ -118,17 +118,17 @@ export default function Slide5Demo() {
         >
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: "1.8vw", fontWeight: 400, color: blue, letterSpacing: "-0.02em" }}>URL Scan</div>
-            <div style={{ fontSize: "1vw", color: "#8e8e93", marginTop: "0.5vh", fontWeight: 300 }}>ao vivo</div>
+            <div style={{ fontSize: "1vw", color: "hsl(0, 0%, 55%)", marginTop: "0.5vh", fontWeight: 300 }}>ao vivo</div>
           </div>
-          <div style={{ width: "1px", height: "4vh", background: "rgba(0,0,0,0.12)" }} />
+          <div style={{ width: "1px", height: "4vh", background: "rgba(255,255,255,0.12)" }} />
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: "1.8vw", fontWeight: 400, color: blue, letterSpacing: "-0.02em" }}>Deep Scan</div>
-            <div style={{ fontSize: "1vw", color: "#8e8e93", marginTop: "0.5vh", fontWeight: 300 }}>GitHub + Gemini</div>
+            <div style={{ fontSize: "1vw", color: "hsl(0, 0%, 55%)", marginTop: "0.5vh", fontWeight: 300 }}>GitHub + Gemini</div>
           </div>
-          <div style={{ width: "1px", height: "4vh", background: "rgba(0,0,0,0.12)" }} />
+          <div style={{ width: "1px", height: "4vh", background: "rgba(255,255,255,0.12)" }} />
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: "1.8vw", fontWeight: 400, color: blue, letterSpacing: "-0.02em" }}>Custo Dev</div>
-            <div style={{ fontSize: "1vw", color: "#8e8e93", marginTop: "0.5vh", fontWeight: 300 }}>por vulnerabilidade</div>
+            <div style={{ fontSize: "1vw", color: "hsl(0, 0%, 55%)", marginTop: "0.5vh", fontWeight: 300 }}>por vulnerabilidade</div>
           </div>
         </div>
       </div>

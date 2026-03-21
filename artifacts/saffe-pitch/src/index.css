@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #1A1919;
-  --orange: #FF3B00;
-  --text: #F8F5F1;
-  --muted: #9A9A9A;
-  --card: #222020;
-  --border: #2E2B2B;
+  --bg: #121212;
+  --blue: hsl(212, 100%, 56%);
+  --text: hsl(0, 0%, 95%);
+  --muted: hsl(0, 0%, 55%);
+  --card: hsl(0, 0%, 10%);
+  --border: hsl(0, 0%, 18%);
   font-family: "Inter", system-ui, sans-serif;
   color-scheme: dark;
 }
@@ -17,12 +17,12 @@ body,
   width: 100%;
   height: 100%;
   margin: 0;
-  background: #1A1919;
+  background: #121212;
 }
 
 body {
-  background: #1A1919;
-  color: #F8F5F1;
+  background: #121212;
+  color: hsl(0, 0%, 95%);
 }
 
 .slide {

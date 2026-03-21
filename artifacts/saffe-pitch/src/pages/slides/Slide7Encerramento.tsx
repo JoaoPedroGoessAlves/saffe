@@ -1,27 +1,27 @@
 export default function Slide7Encerramento() {
-  const blue = "hsl(212, 100%, 44%)";
-  const blueLight = "rgba(0, 112, 224, 0.08)";
-  const blueBorder = "rgba(0, 112, 224, 0.20)";
+  const blue = "hsl(212, 100%, 56%)";
+  const blueLight = "rgba(30, 144, 255, 0.10)";
+  const blueBorder = "rgba(30, 144, 255, 0.22)";
 
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: "#f5f5f7", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+      style={{ background: "#121212", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
     >
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,112,224,0.07) 0%, transparent 65%)",
+            "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(30,144,255,0.09) 0%, transparent 65%)",
         }}
       />
       <div
         className="absolute bottom-0 left-0 w-full"
-        style={{ height: "4px", background: blue }}
+        style={{ height: "4px", background: "#2997ff" }}
       />
       <div
         className="absolute top-0 right-0 h-full"
-        style={{ width: "4px", background: blue }}
+        style={{ width: "4px", background: "#2997ff" }}
       />
 
       <div
@@ -57,7 +57,7 @@ export default function Slide7Encerramento() {
               fontSize: "3.5vw",
               fontWeight: 200,
               letterSpacing: "-0.05em",
-              color: "#1c1c1e",
+              color: "hsl(0, 0%, 95%)",
             }}
           >
             Saffe
@@ -70,7 +70,7 @@ export default function Slide7Encerramento() {
             fontWeight: 200,
             letterSpacing: "-0.06em",
             lineHeight: 1.0,
-            color: "#1c1c1e",
+            color: "hsl(0, 0%, 95%)",
             margin: 0,
           }}
         >
@@ -93,7 +93,7 @@ export default function Slide7Encerramento() {
           style={{
             width: "8vw",
             height: "2px",
-            background: blue,
+            background: "#2997ff",
             margin: "4vh auto",
           }}
         />
@@ -101,7 +101,7 @@ export default function Slide7Encerramento() {
         <p
           style={{
             fontSize: "1.3vw",
-            color: "#636366",
+            color: "hsl(0, 0%, 55%)",
             lineHeight: 1.6,
             maxWidth: "40vw",
             fontWeight: 300,
@@ -115,28 +115,28 @@ export default function Slide7Encerramento() {
           style={{ gap: "4vw", marginTop: "5vh" }}
         >
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "0.9vw", color: "#8e8e93", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
+            <div style={{ fontSize: "0.9vw", color: "hsl(0, 0%, 55%)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
               Equipe
             </div>
-            <div style={{ fontSize: "1.3vw", color: "#1c1c1e", fontWeight: 400 }}>
+            <div style={{ fontSize: "1.3vw", color: "hsl(0, 0%, 95%)", fontWeight: 400 }}>
               Saffe Team
             </div>
           </div>
-          <div style={{ width: "1px", height: "4vh", background: "rgba(0,0,0,0.12)" }} />
+          <div style={{ width: "1px", height: "4vh", background: "rgba(255,255,255,0.12)" }} />
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "0.9vw", color: "#8e8e93", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
+            <div style={{ fontSize: "0.9vw", color: "hsl(0, 0%, 55%)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
               Evento
             </div>
-            <div style={{ fontSize: "1.3vw", color: "#1c1c1e", fontWeight: 400 }}>
+            <div style={{ fontSize: "1.3vw", color: "hsl(0, 0%, 95%)", fontWeight: 400 }}>
               Replit + Resend Hackathon
             </div>
           </div>
-          <div style={{ width: "1px", height: "4vh", background: "rgba(0,0,0,0.12)" }} />
+          <div style={{ width: "1px", height: "4vh", background: "rgba(255,255,255,0.12)" }} />
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "0.9vw", color: "#8e8e93", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
+            <div style={{ fontSize: "0.9vw", color: "hsl(0, 0%, 55%)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
               Data
             </div>
-            <div style={{ fontSize: "1.3vw", color: "#1c1c1e", fontWeight: 400 }}>
+            <div style={{ fontSize: "1.3vw", color: "hsl(0, 0%, 95%)", fontWeight: 400 }}>
               21 de Março, 2026
             </div>
           </div>

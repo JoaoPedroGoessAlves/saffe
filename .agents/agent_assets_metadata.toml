@@ -1,0 +1,14 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "SooPWk4qn4nBpWTtS85MA"
+uri = "file://.local/outputs/Secure-Vibe-Scan.pptx"
+type = "slides"
+title = "Secure Vibe Scan.pptx"
+
+[[outputs]]
+id = "JEmnnsCgTf1LjqTCLOIBU"
+uri = "file://.local/outputs/Secure-Vibe-Scan.pdf"
+type = "pdf"
+title = "Secure Vibe Scan.pdf"

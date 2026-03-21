@@ -1,24 +1,24 @@
 export default function Slide4ComoFunciona() {
-  const blue = "hsl(212, 100%, 44%)";
-  const blueLight = "rgba(0, 112, 224, 0.08)";
-  const blueBorder = "rgba(0, 112, 224, 0.20)";
-  const blueBorderStrong = "rgba(0, 112, 224, 0.45)";
+  const blue = "hsl(212, 100%, 56%)";
+  const blueLight = "rgba(30, 144, 255, 0.10)";
+  const blueBorder = "rgba(30, 144, 255, 0.22)";
+  const blueBorderStrong = "rgba(30, 144, 255, 0.50)";
 
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: "#f5f5f7", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+      style={{ background: "#121212", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
     >
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 50% 50% at 50% 100%, rgba(0,112,224,0.05) 0%, transparent 70%)",
+            "radial-gradient(ellipse 50% 50% at 50% 100%, rgba(30,144,255,0.07) 0%, transparent 70%)",
         }}
       />
       <div
         className="absolute top-0 left-0 w-full"
-        style={{ height: "4px", background: blue }}
+        style={{ height: "4px", background: "#2997ff" }}
       />
 
       <div
@@ -42,7 +42,7 @@ export default function Slide4ComoFunciona() {
             style={{
               fontSize: "3.5vw",
               fontWeight: 200,
-              color: "#1c1c1e",
+              color: "hsl(0, 0%, 95%)",
               letterSpacing: "-0.04em",
               lineHeight: 1.1,
               margin: 0,
@@ -59,11 +59,11 @@ export default function Slide4ComoFunciona() {
           <div
             style={{
               flex: 1,
-              background: "rgba(255,255,255,0.85)",
+              background: "rgba(255,255,255,0.05)",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
-              border: `1px solid rgba(0,0,0,0.08)`,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
+              border: `1px solid rgba(255,255,255,0.10)`,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.40), 0 1px 4px rgba(0,0,0,0.30)",
               padding: "3.5vh 2.5vw",
               position: "relative",
               overflow: "hidden",
@@ -115,7 +115,7 @@ export default function Slide4ComoFunciona() {
               style={{
                 fontSize: "1.6vw",
                 fontWeight: 400,
-                color: "#1c1c1e",
+                color: "hsl(0, 0%, 95%)",
                 margin: 0,
                 marginBottom: "1.5vh",
                 letterSpacing: "-0.02em",
@@ -123,7 +123,7 @@ export default function Slide4ComoFunciona() {
             >
               Scan de URL
             </h3>
-            <p style={{ fontSize: "1.1vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
+            <p style={{ fontSize: "1.1vw", color: "hsl(0, 0%, 55%)", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
               Informe a URL do seu app. Saffe analisa headers HTTP, endpoints expostos, configurações de CORS e presença de dados sensíveis em respostas públicas.
             </p>
           </div>
@@ -131,11 +131,11 @@ export default function Slide4ComoFunciona() {
           <div
             style={{
               flex: 1,
-              background: "rgba(255,255,255,0.95)",
+              background: "rgba(30,144,255,0.07)",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
               border: `1.5px solid ${blueBorderStrong}`,
-              boxShadow: `0 4px 24px rgba(0,112,224,0.12), 0 1px 4px rgba(0,112,224,0.08)`,
+              boxShadow: `0 4px 24px rgba(30,144,255,0.15), 0 1px 4px rgba(30,144,255,0.10)`,
               padding: "3.5vh 2.5vw",
               position: "relative",
               overflow: "hidden",
@@ -157,7 +157,7 @@ export default function Slide4ComoFunciona() {
               style={{
                 width: "3.5vw",
                 height: "3.5vw",
-                background: "rgba(0, 112, 224, 0.12)",
+                background: "rgba(30, 144, 255, 0.14)",
                 border: `1px solid ${blueBorderStrong}`,
                 display: "flex",
                 alignItems: "center",
@@ -186,7 +186,7 @@ export default function Slide4ComoFunciona() {
               style={{
                 fontSize: "1.6vw",
                 fontWeight: 400,
-                color: "#1c1c1e",
+                color: "hsl(0, 0%, 95%)",
                 margin: 0,
                 marginBottom: "1.5vh",
                 letterSpacing: "-0.02em",
@@ -194,7 +194,7 @@ export default function Slide4ComoFunciona() {
             >
               Deep Scan de Código
             </h3>
-            <p style={{ fontSize: "1.1vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
+            <p style={{ fontSize: "1.1vw", color: "hsl(0, 0%, 55%)", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
               Conecte seu repositório GitHub. Gemini analisa o código-fonte em busca de vulnerabilidades OWASP, chaves hardcoded e lógica de autenticação fraca.
             </p>
           </div>
@@ -202,11 +202,11 @@ export default function Slide4ComoFunciona() {
           <div
             style={{
               flex: 1,
-              background: "rgba(255,255,255,0.85)",
+              background: "rgba(255,255,255,0.05)",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
-              border: `1px solid rgba(0,0,0,0.08)`,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
+              border: `1px solid rgba(255,255,255,0.10)`,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.40), 0 1px 4px rgba(0,0,0,0.30)",
               padding: "3.5vh 2.5vw",
               position: "relative",
               overflow: "hidden",
@@ -258,7 +258,7 @@ export default function Slide4ComoFunciona() {
               style={{
                 fontSize: "1.6vw",
                 fontWeight: 400,
-                color: "#1c1c1e",
+                color: "hsl(0, 0%, 95%)",
                 margin: 0,
                 marginBottom: "1.5vh",
                 letterSpacing: "-0.02em",
@@ -266,7 +266,7 @@ export default function Slide4ComoFunciona() {
             >
               Estimativa de Custo Dev
             </h3>
-            <p style={{ fontSize: "1.1vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
+            <p style={{ fontSize: "1.1vw", color: "hsl(0, 0%, 55%)", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
               Calcula o custo estimado para corrigir cada vulnerabilidade por um desenvolvedor humano — justificando o investimento em segurança com dados reais.
             </p>
           </div>
