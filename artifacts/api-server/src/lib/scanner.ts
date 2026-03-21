@@ -400,6 +400,7 @@ async function checkSensitiveFiles(baseUrl: string): Promise<ScanCheck> {
     { path: "/api/keys", name: "api/keys" },
     { path: "/.env.local", name: ".env.local" },
     { path: "/.env.production", name: ".env.production" },
+    { path: "/admin", name: "/admin" },
   ];
 
   const accessible: string[] = [];

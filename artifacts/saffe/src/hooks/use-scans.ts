@@ -9,7 +9,6 @@ import {
 } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 
-// Wrapper hooks to add cache invalidation and toast notifications
 export function useSaffeCreateScan() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -27,10 +26,10 @@ export function useSaffeCreateScan() {
         toast({
           variant: "destructive",
           title: "Failed to start scan",
-          description: error.error || "An unexpected error occurred.",
+          description: error.message || "An unexpected error occurred.",
         });
-      }
-    }
+      },
+    },
   });
 }
 
@@ -43,10 +42,10 @@ export function useSaffeInitVerification() {
         toast({
           variant: "destructive",
           title: "Verification Failed",
-          description: error.error || "Could not initialize domain verification.",
+          description: error.message || "Could not initialize domain verification.",
         });
-      }
-    }
+      },
+    },
   });
 }
 
@@ -67,10 +66,10 @@ export function useSaffeConfirmVerification() {
         toast({
           variant: "destructive",
           title: "Confirmation Failed",
-          description: error.error || "Could not confirm domain ownership. Make sure the meta tag is correctly placed.",
+          description: error.message || "Could not confirm domain ownership. Make sure the meta tag is correctly placed.",
         });
-      }
-    }
+      },
+    },
   });
 }
 
@@ -89,9 +88,11 @@ export function useSaffeSendReport() {
         toast({
           variant: "destructive",
           title: "Failed to send email",
-          description: error.error || "An unexpected error occurred.",
+          description: error.message || "An unexpected error occurred.",
         });
-      }
-    }
+      },
+    },
   });
 }
+
+export { getGetScanQueryKey, getListScansQueryKey };

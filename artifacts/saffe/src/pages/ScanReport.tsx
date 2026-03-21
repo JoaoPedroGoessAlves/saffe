@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from "react";
 import { useParams, Link } from "wouter";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
@@ -10,7 +11,7 @@ import {
   ChevronDown, Copy, ShieldAlert, Mail, ArrowLeft, Loader2, Sparkles
 } from "lucide-react";
 
-import { useGetScan } from "@workspace/api-client-react";
+import { useGetScan, getGetScanQueryKey, type ScanResult } from "@workspace/api-client-react";
 import { useSaffeSendReport } from "@/hooks/use-scans";
 import { Navbar } from "@/components/layout/Navbar";
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
@@ -32,14 +33,16 @@ export default function ScanReport() {
   const { scanId } = useParams<{ scanId: string }>();
   
   // Poll every 2 seconds if status is not completed/failed
-  const { data: scan, isLoading, error } = useGetScan(scanId || "", {
+  const resolvedScanId = scanId || "";
+  const { data: scan, isLoading, error } = useGetScan(resolvedScanId, {
     query: {
+      queryKey: getGetScanQueryKey(resolvedScanId),
       refetchInterval: (query) => {
         const state = query.state.data;
-        if (state?.status === 'completed' || state?.status === 'failed') return false;
+        if (state?.status === "completed" || state?.status === "failed") return false;
         return 2000;
-      }
-    }
+      },
+    },
   });
 
   if (isLoading) {
@@ -198,7 +201,7 @@ export default function ScanReport() {
   );
 }
 
-function ResultCard({ result }: { result: any }) {
+function ResultCard({ result }: { result: ScanResult }) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
@@ -295,7 +298,7 @@ function ResultCard({ result }: { result: any }) {
   );
 }
 
-function EmailReportDialog({ scanId }: { scanId: string }) {
+function EmailReportDialog({ scanId }: Readonly<{ scanId: string }>) {
   const [open, setOpen] = useState(false);
   const sendEmail = useSaffeSendReport();
 
@@ -306,7 +309,7 @@ function EmailReportDialog({ scanId }: { scanId: string }) {
 
   async function onSubmit(values: z.infer<typeof emailSchema>) {
     try {
-      await sendEmail.mutateAsync({ scanId, data: { email: values.email } });
+      await sendEmail.mutateAsync({ scanId, data: { scanId, email: values.email } });
       setOpen(false);
       form.reset();
     } catch (e) {
@@ -358,7 +361,7 @@ function EmailReportDialog({ scanId }: { scanId: string }) {
 }
 
 // Just a simple animated icon for the loading state
-function SearchAnimation(props: any) {
+function SearchAnimation(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <circle cx="11" cy="11" r="8"></circle>
