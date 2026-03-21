@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { useAuth } from "@workspace/replit-auth-web";
 import { Button } from "@/components/ui/button";
+import { SiriButton } from "@/components/ui/siri-button";
 import { ShieldCheck, Lock, Search, FileCode2, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -75,14 +76,14 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="flex flex-col sm:flex-row items-center justify-center gap-4"
               >
-                <Button
+                <SiriButton
                   size="lg"
                   onClick={handleCTA}
                   className="rounded-full px-8 py-6 text-lg font-semibold hover-elevate active-elevate-2 shadow-xl shadow-primary/20 w-full sm:w-auto"
                 >
                   {t("home.ctaButton")}
                   <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+                </SiriButton>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4 sm:mt-0">
                   <CheckCircle2 className="w-4 h-4 text-success" />
                   {t("home.noCreditCard")}
