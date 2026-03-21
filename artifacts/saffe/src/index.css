@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -50,8 +50,8 @@
   --color-info: hsl(var(--info));
   --color-info-foreground: hsl(var(--info-foreground));
 
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -61,214 +61,8 @@
   --radius-2xl: calc(var(--radius) + 8px);
 }
 
+/* === Apple light theme === */
 :root {
-  --background: 210 20% 98%;
-  --foreground: 222 47% 11%;
-  
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --card-border: 214 32% 91%;
-  
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-  --popover-border: 214 32% 91%;
-  
-  --primary: 230 60% 30%;
-  --primary-foreground: 210 40% 98%;
-  
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
-  
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  
-  --accent: 250 84% 60%;
-  --accent-foreground: 210 40% 98%;
-  
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
-
-  --success: 142 71% 45%;
-  --success-foreground: 210 40% 98%;
-
-  --warning: 38 92% 50%;
-  --warning-foreground: 48 96% 89%;
-  
-  --info: 214 80% 50%;
-  --info-foreground: 210 40% 98%;
-  
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 250 84% 60%;
-  
-  --radius: 0.75rem;
-
-  --button-outline: rgba(0,0,0, .10);
-  --badge-outline: rgba(0,0,0, .05);
-  --opaque-button-border-intensity: -8;
-  --elevate-1: rgba(0,0,0, .03);
-  --elevate-2: rgba(0,0,0, .08);
-
-  --sidebar: 0 0% 100%;
-  --sidebar-foreground: 222 47% 11%;
-  --sidebar-border: 214 32% 91%;
-  --sidebar-primary: 230 60% 30%;
-  --sidebar-primary-foreground: 210 40% 98%;
-  --sidebar-accent: 210 40% 96%;
-  --sidebar-accent-foreground: 222 47% 11%;
-  --sidebar-ring: 250 84% 60%;
-}
-
-.dark {
-  --background: 222 47% 11%;
-  --foreground: 210 40% 98%;
-  
-  --card: 222 47% 12%;
-  --card-foreground: 210 40% 98%;
-  --card-border: 217 33% 17%;
-  
-  --popover: 222 47% 12%;
-  --popover-foreground: 210 40% 98%;
-  --popover-border: 217 33% 17%;
-  
-  --primary: 210 40% 98%;
-  --primary-foreground: 222 47% 11%;
-  
-  --secondary: 217 33% 17%;
-  --secondary-foreground: 210 40% 98%;
-  
-  --muted: 217 33% 17%;
-  --muted-foreground: 215 20.2% 65.1%;
-  
-  --accent: 250 84% 60%;
-  --accent-foreground: 210 40% 98%;
-  
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-
-  --success: 142 70% 30%;
-  --success-foreground: 210 40% 98%;
-
-  --warning: 38 92% 40%;
-  --warning-foreground: 210 40% 98%;
-  
-  --info: 214 80% 40%;
-  --info-foreground: 210 40% 98%;
-  
-  --border: 217 33% 17%;
-  --input: 217 33% 17%;
-  --ring: 250 84% 60%;
-
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
-  --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
-}
-
-/* ===== Vercel Theme ===== */
-.ui-vercel {
-  --background: 0 0% 0%;
-  --foreground: 0 0% 100%;
-
-  --card: 0 0% 5%;
-  --card-foreground: 0 0% 100%;
-  --card-border: 0 0% 18%;
-
-  --popover: 0 0% 5%;
-  --popover-foreground: 0 0% 100%;
-  --popover-border: 0 0% 18%;
-
-  /* Black button with white text — spec: "botão primário preto com cantos retos" */
-  --primary: 0 0% 8%;
-  --primary-foreground: 0 0% 100%;
-
-  --secondary: 0 0% 10%;
-  --secondary-foreground: 0 0% 100%;
-
-  --muted: 0 0% 10%;
-  --muted-foreground: 0 0% 55%;
-
-  --accent: 214 100% 48%;
-  --accent-foreground: 0 0% 100%;
-
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-
-  --success: 142 71% 45%;
-  --success-foreground: 0 0% 100%;
-
-  --warning: 38 92% 50%;
-  --warning-foreground: 0 0% 0%;
-
-  --info: 214 80% 50%;
-  --info-foreground: 0 0% 100%;
-
-  --border: 0 0% 18%;
-  --input: 0 0% 18%;
-  --ring: 214 100% 48%;
-
-  --radius: 4px;
-
-  --button-outline: rgba(255,255,255, .15);
-  --badge-outline: rgba(255,255,255, .08);
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
-
-  --sidebar: 0 0% 3%;
-  --sidebar-foreground: 0 0% 100%;
-  --sidebar-border: 0 0% 18%;
-  --sidebar-primary: 0 0% 100%;
-  --sidebar-primary-foreground: 0 0% 0%;
-  --sidebar-accent: 0 0% 10%;
-  --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-ring: 214 100% 48%;
-}
-
-.ui-vercel body {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h40v40H0z' fill='none'/%3E%3Cpath d='M0 40V0M40 40V0' stroke='%23222' stroke-width='0.5'/%3E%3Cpath d='M0 0h40M0 40h40' stroke='%23222' stroke-width='0.5'/%3E%3C/svg%3E");
-  background-size: 40px 40px;
-}
-
-.ui-vercel h1, .ui-vercel h2, .ui-vercel h3,
-.ui-vercel h4, .ui-vercel h5, .ui-vercel h6 {
-  font-family: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace, system-ui;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.ui-vercel .glass-panel {
-  background: #000 !important;
-  border-color: #222 !important;
-  backdrop-filter: none !important;
-  box-shadow: none !important;
-}
-
-/* Vercel: card components — thin border, no shadow, sharp corners */
-.ui-vercel .rounded-xl,
-.ui-vercel .rounded-2xl,
-.ui-vercel .rounded-3xl {
-  border-radius: 4px !important;
-  border-color: #333 !important;
-}
-
-.ui-vercel .shadow,
-.ui-vercel .shadow-sm,
-.ui-vercel .shadow-md,
-.ui-vercel .shadow-lg,
-.ui-vercel .shadow-xl,
-.ui-vercel .shadow-2xl {
-  box-shadow: none !important;
-}
-
-/* Vercel: suppress dark variant to keep fixed scheme */
-.ui-vercel.dark {
-  --background: 0 0% 0%;
-  --foreground: 0 0% 100%;
-}
-
-/* ===== Apple Theme ===== */
-.ui-apple {
   --background: 0 0% 100%;
   --foreground: 0 0% 11%;
 
@@ -312,6 +106,7 @@
 
   --button-outline: rgba(0,0,0, .08);
   --badge-outline: rgba(0,0,0, .04);
+  --opaque-button-border-intensity: -8;
   --elevate-1: rgba(0,0,0, .02);
   --elevate-2: rgba(0,0,0, .06);
 
@@ -323,68 +118,62 @@
   --sidebar-accent: 0 0% 95%;
   --sidebar-accent-foreground: 0 0% 11%;
   --sidebar-ring: 212 100% 44%;
+
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
 }
 
-.ui-apple .glass-panel {
-  background: rgba(255,255,255,0.85) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-color: rgba(0,0,0,0.08) !important;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.06) !important;
-}
+/* === Apple dark theme === */
+.dark {
+  --background: 0 0% 7%;
+  --foreground: 0 0% 95%;
 
-.ui-apple h1, .ui-apple h2, .ui-apple h3,
-.ui-apple h4, .ui-apple h5, .ui-apple h6 {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  font-weight: 300;
-  letter-spacing: -0.02em;
-}
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 95%;
+  --card-border: 0 0% 18%;
 
-/* Apple: pill-shaped primary and default buttons only */
-.ui-apple button.bg-primary,
-.ui-apple button.bg-foreground,
-.ui-apple a > button,
-.ui-apple button[class*="rounded-full"] {
-  border-radius: 980px !important;
-}
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 95%;
+  --popover-border: 0 0% 18%;
 
-/* Apple: navbar ultra-thin (h-12 instead of h-16) */
-.ui-apple header > div {
-  height: 3rem !important;
-}
+  --primary: 212 100% 56%;
+  --primary-foreground: 0 0% 100%;
 
-/* Apple: hero/homepage heading scale — larger */
-.ui-apple h1 {
-  font-size: clamp(3.5rem, 8vw, 6rem) !important;
-  line-height: 1.05 !important;
-}
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 95%;
 
-/* Apple: cards — no visible border, soft shadow only (scoped to card components) */
-.ui-apple .rounded-xl,
-.ui-apple .rounded-2xl,
-.ui-apple .rounded-3xl {
-  border-color: transparent !important;
-}
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 55%;
 
-.ui-apple .shadow-lg,
-.ui-apple .shadow-xl,
-.ui-apple .shadow-2xl {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04) !important;
-}
+  --accent: 212 100% 56%;
+  --accent-foreground: 0 0% 100%;
 
-.ui-apple .shadow {
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04) !important;
-}
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
 
-/* Apple: suppress dark variant to keep fixed light scheme */
-.ui-apple.dark {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 11%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 11%;
-  --muted: 0 0% 95%;
-  --muted-foreground: 0 0% 40%;
-  --border: 0 0% 92%;
+  --success: 142 60% 40%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 38 85% 45%;
+  --warning-foreground: 0 0% 100%;
+
+  --info: 212 100% 56%;
+  --info-foreground: 0 0% 100%;
+
+  --border: 0 0% 18%;
+  --input: 0 0% 18%;
+  --ring: 212 100% 56%;
+
+  --button-outline: rgba(255,255,255, .12);
+  --badge-outline: rgba(255,255,255, .06);
+  --opaque-button-border-intensity: 9;
+  --elevate-1: rgba(255,255,255, .04);
+  --elevate-2: rgba(255,255,255, .08);
+
+  --glass-bg: rgba(28, 28, 30, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 @layer base {
@@ -395,7 +184,9 @@
     @apply bg-background text-foreground font-sans antialiased selection:bg-accent/30 selection:text-accent-foreground;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-semibold tracking-tight;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Outfit', sans-serif;
+    font-weight: 300;
+    letter-spacing: -0.02em;
   }
 }
 
@@ -407,9 +198,48 @@
     @apply active:translate-y-0 active:shadow-sm transition-all duration-150;
   }
   .glass-panel {
-    @apply bg-background/80 backdrop-blur-xl border border-border/50 shadow-lg shadow-black/5;
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-color: var(--glass-border) !important;
+    box-shadow: var(--glass-shadow) !important;
   }
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-primary;
   }
+}
+
+/* === Apple pill buttons === */
+button.bg-primary,
+button.bg-foreground,
+a > button,
+button[class*="rounded-full"] {
+  border-radius: 980px !important;
+}
+
+/* === Apple hero heading scale === */
+h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem) !important;
+  line-height: 1.05 !important;
+}
+
+/* === Apple card: soft shadow, no border === */
+.shadow-lg,
+.shadow-xl,
+.shadow-2xl {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04) !important;
+}
+
+.shadow {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04) !important;
+}
+
+.dark .shadow-lg,
+.dark .shadow-xl,
+.dark .shadow-2xl {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3) !important;
+}
+
+.dark .shadow {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2) !important;
 }
