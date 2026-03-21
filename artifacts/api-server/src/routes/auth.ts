@@ -90,6 +90,14 @@ router.get("/auth/user", (req: Request, res: Response) => {
   );
 });
 
+router.get("/auth/me", (req: Request, res: Response) => {
+  res.json(
+    GetCurrentAuthUserResponse.parse({
+      user: req.isAuthenticated() ? req.user : null,
+    }),
+  );
+});
+
 router.get("/login", async (req: Request, res: Response) => {
   const config = await getOidcConfig();
   const callbackUrl = `${getOrigin(req)}/api/callback`;

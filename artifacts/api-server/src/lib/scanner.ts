@@ -63,6 +63,39 @@ async function assertPublicHost(hostname: string): Promise<void> {
   }
 }
 
+async function safeRedirectFetch(
+  initialUrl: string,
+  requestInit: RequestInit & { signal?: AbortSignal },
+  maxRedirects = 5,
+): Promise<{ response: Response; finalUrl: string }> {
+  let currentUrl = initialUrl;
+  let hopsLeft = maxRedirects;
+
+  while (true) {
+    const response = await fetch(currentUrl, { ...requestInit, redirect: "manual" });
+
+    if (response.status >= 300 && response.status < 400) {
+      if (hopsLeft <= 0) throw new Error("Too many redirects");
+      const location = response.headers.get("location");
+      if (!location) throw new Error("Redirect without Location header");
+
+      const nextUrl = new URL(location, currentUrl).href;
+      if (!nextUrl.startsWith("http://") && !nextUrl.startsWith("https://")) {
+        throw new Error(`Redirect to disallowed protocol: ${nextUrl}`);
+      }
+
+      const nextParsed = new URL(nextUrl);
+      await assertPublicHost(nextParsed.hostname);
+
+      currentUrl = nextUrl;
+      hopsLeft--;
+      continue;
+    }
+
+    return { response, finalUrl: currentUrl };
+  }
+}
+
 async function fetchUrl(url: string, timeout = 10000): Promise<FetchResult | null> {
   try {
     const parsed = new URL(url);
@@ -71,14 +104,16 @@ async function fetchUrl(url: string, timeout = 10000): Promise<FetchResult | nul
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeout);
 
-    const response = await fetch(url, {
-      signal: controller.signal,
-      redirect: "follow",
-      headers: {
-        "User-Agent": "Saffe-Security-Scanner/1.0 (+https://saffe.app)",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    const { response, finalUrl } = await safeRedirectFetch(
+      url,
+      {
+        signal: controller.signal,
+        headers: {
+          "User-Agent": "Saffe-Security-Scanner/1.0 (+https://saffe.app)",
+          Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        },
       },
-    });
+    );
 
     clearTimeout(timer);
 
@@ -88,7 +123,6 @@ async function fetchUrl(url: string, timeout = 10000): Promise<FetchResult | nul
     });
 
     const body = await response.text();
-    const finalUrl = response.url || url;
     const isHttps = finalUrl.startsWith("https://");
 
     const setCookieHeaders = response.headers.getSetCookie ? response.headers.getSetCookie() : [];
@@ -127,6 +161,7 @@ async function checkSensitiveFile(baseUrl: string, path: string): Promise<{ acce
     setTimeout(() => controller.abort(), 5000);
     const response = await fetch(url, {
       signal: controller.signal,
+      redirect: "error",
       headers: { "User-Agent": "Saffe-Security-Scanner/1.0" },
     });
     if (response.status === 200) {
@@ -167,16 +202,16 @@ async function fetchJsBundle(url: string, timeout = 8000, maxBytes = 2 * 1024 * 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeout);
 
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: { "User-Agent": "Saffe-Security-Scanner/1.0" },
-    });
+    const { response, finalUrl } = await safeRedirectFetch(
+      url,
+      { signal: controller.signal, headers: { "User-Agent": "Saffe-Security-Scanner/1.0" } },
+    );
 
     clearTimeout(timer);
 
     if (!response.ok) return null;
     const contentType = response.headers.get("content-type") ?? "";
-    if (!contentType.includes("javascript") && !contentType.includes("text/") && !url.endsWith(".js")) {
+    if (!contentType.includes("javascript") && !contentType.includes("text/") && !finalUrl.endsWith(".js")) {
       return null;
     }
 

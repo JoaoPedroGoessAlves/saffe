@@ -48,16 +48,46 @@ function extractDomain(url: string): string | null {
   }
 }
 
+async function safeRedirectFetch(
+  initialUrl: string,
+  signal: AbortSignal,
+  maxRedirects = 5,
+): Promise<globalThis.Response> {
+  let currentUrl = initialUrl;
+  let hopsLeft = maxRedirects;
+
+  while (true) {
+    const fetchResponse = await fetch(currentUrl, {
+      signal,
+      redirect: "manual",
+      headers: { "User-Agent": "Saffe-Verification/1.0" },
+    });
+
+    if (fetchResponse.status >= 300 && fetchResponse.status < 400) {
+      if (hopsLeft <= 0) throw new Error("Too many redirects");
+      const location = fetchResponse.headers.get("location");
+      if (!location) throw new Error("Redirect without Location header");
+      const nextUrl = new URL(location, currentUrl).href;
+      if (!nextUrl.startsWith("http://") && !nextUrl.startsWith("https://")) {
+        throw new Error(`Redirect to disallowed protocol blocked`);
+      }
+      await assertPublicHost(new URL(nextUrl).hostname);
+      currentUrl = nextUrl;
+      hopsLeft--;
+      continue;
+    }
+
+    return fetchResponse;
+  }
+}
+
 async function checkMetaTag(url: string, token: string): Promise<boolean> {
   try {
     const parsed = new URL(url);
     await assertPublicHost(parsed.hostname);
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 10000);
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: { "User-Agent": "Saffe-Verification/1.0" },
-    });
+    const response = await safeRedirectFetch(url, controller.signal);
     const body = await response.text();
     const expectedTag = `saffe-verify" content="${token}"`;
     return body.includes(expectedTag);
