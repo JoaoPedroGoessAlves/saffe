@@ -213,11 +213,10 @@ router.post("/jules-scan", async (req: Request, res: Response) => {
         method: "POST",
         headers: getJulesHeaders(),
         body: JSON.stringify({
+          title: `Security scan: ${repo.owner}/${repo.name}`,
           prompt,
-          sourceContext: {
-            source: `sources/github/${repo.owner}/${repo.name}`,
-          },
-          requirePlanApproval: false,
+          source: `sources/github/${repo.owner}/${repo.name}`,
+          branch: "main",
         }),
       });
 
@@ -227,7 +226,7 @@ router.post("/jules-scan", async (req: Request, res: Response) => {
           .update(julesAnalysesTable)
           .set({
             status: "failed",
-            errorMessage: `Jules API error ${sessionRes.status}: ${errBody.slice(0, 500)}`,
+            errorMessage: `Jules API error ${sessionRes.status}: ${errBody}`,
           })
           .where(eq(julesAnalysesTable.id, analysis.id));
         return;
