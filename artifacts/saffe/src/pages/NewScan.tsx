@@ -14,17 +14,17 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useSaffeInitVerification, useSaffeConfirmVerification, useSaffeCreateScan } from "@/hooks/use-scans";
-
-const urlSchema = z.object({
-  url: z.string().url("Please enter a valid URL (e.g., https://myapp.com)"),
-});
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Step = "input" | "verify" | "scanning";
+
+type UrlFormData = { url: string };
 
 export default function NewScan() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  
+  const { t } = useLanguage();
+
   const [step, setStep] = useState<Step>("input");
   const [domainData, setDomainData] = useState<{ domain: string; token: string; metaTag: string } | null>(null);
   const [copied, setCopied] = useState(false);
@@ -33,17 +33,20 @@ export default function NewScan() {
   const confirmVerification = useSaffeConfirmVerification();
   const createScan = useSaffeCreateScan();
 
-  const form = useForm<z.infer<typeof urlSchema>>({
+  const urlSchema = z.object({
+    url: z.string().url(t("validation.invalidUrl")),
+  });
+
+  const form = useForm<UrlFormData>({
     resolver: zodResolver(urlSchema),
     defaultValues: { url: "" },
   });
 
-  async function onUrlSubmit(values: z.infer<typeof urlSchema>) {
+  async function onUrlSubmit(values: UrlFormData) {
     try {
       const res = await initVerification.mutateAsync({ data: { url: values.url } });
-      
+
       if (res.alreadyVerified) {
-        // Skip verification step if already verified
         startScan(values.url);
       } else {
         setDomainData({
@@ -60,7 +63,7 @@ export default function NewScan() {
 
   async function onVerifyConfirm() {
     if (!domainData) return;
-    
+
     try {
       const res = await confirmVerification.mutateAsync({ data: { domain: domainData.domain } });
       if (res.verified) {
@@ -77,7 +80,7 @@ export default function NewScan() {
       const res = await createScan.mutateAsync({ data: { url } });
       setLocation(`/scan/${res.scanId}`);
     } catch (e) {
-      setStep(domainData ? "verify" : "input"); // Revert on failure
+      setStep(domainData ? "verify" : "input");
     }
   }
 
@@ -85,7 +88,7 @@ export default function NewScan() {
     if (!domainData) return;
     navigator.clipboard.writeText(domainData.metaTag);
     setCopied(true);
-    toast({ description: "Meta tag copied to clipboard" });
+    toast({ description: t("newScan.metaTagCopied") });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -93,15 +96,15 @@ export default function NewScan() {
     <ProtectedRoute>
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
-        
+
         <main className="flex-1 container max-w-3xl mx-auto px-4 py-12 md:py-20 flex flex-col items-center justify-center">
-          
+
           <div className="w-full text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-              Run a Security Scan
+              {t("newScan.pageTitle")}
             </h1>
             <p className="text-muted-foreground text-lg">
-              Verify your ownership to get a complete security analysis of your app.
+              {t("newScan.pageSubtitle")}
             </p>
           </div>
 
@@ -119,10 +122,10 @@ export default function NewScan() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <Link2 className="w-5 h-5 text-primary" />
-                        Enter Application URL
+                        {t("newScan.inputTitle")}
                       </CardTitle>
                       <CardDescription>
-                        Paste the full URL of the application you want to scan.
+                        {t("newScan.inputDesc")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -135,26 +138,26 @@ export default function NewScan() {
                               <FormItem>
                                 <FormLabel className="sr-only">URL</FormLabel>
                                 <FormControl>
-                                  <Input 
-                                    placeholder="https://my-awesome-app.lovable.app" 
+                                  <Input
+                                    placeholder={t("newScan.urlPlaceholder")}
                                     className="h-14 text-lg bg-muted/30 focus-visible:ring-primary/20"
-                                    {...field} 
+                                    {...field}
                                   />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
                           />
-                          <Button 
-                            type="submit" 
-                            size="lg" 
+                          <Button
+                            type="submit"
+                            size="lg"
                             className="w-full h-14 text-lg rounded-xl hover-elevate active-elevate-2 shadow-lg shadow-primary/20"
                             disabled={initVerification.isPending}
                           >
                             {initVerification.isPending ? (
-                              <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Preparing...</>
+                              <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> {t("newScan.preparing")}</>
                             ) : (
-                              <>Continue <ArrowRight className="ml-2 h-5 w-5" /></>
+                              <>{t("newScan.continue")} <ArrowRight className="ml-2 h-5 w-5" /></>
                             )}
                           </Button>
                         </form>
@@ -176,22 +179,24 @@ export default function NewScan() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <ShieldAlert className="w-5 h-5 text-accent" />
-                        Verify Domain Ownership
+                        {t("newScan.verifyTitle")}
                       </CardTitle>
                       <CardDescription>
-                        For security reasons, we need to verify you own <strong className="text-foreground">{domainData.domain}</strong> before scanning.
+                        {t("newScan.verifyDesc1")} <strong className="text-foreground">{domainData.domain}</strong> {t("newScan.verifyDesc2")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="bg-muted/50 p-4 rounded-xl border border-border">
-                        <p className="text-sm font-medium mb-3">1. Add this meta tag to your application's <code className="bg-muted px-1.5 py-0.5 rounded text-xs">&lt;head&gt;</code> section:</p>
+                        <p className="text-sm font-medium mb-3">
+                          {t("newScan.verifyStep1")} <code className="bg-muted px-1.5 py-0.5 rounded text-xs">&lt;head&gt;</code> {t("newScan.verifyStep1b")}
+                        </p>
                         <div className="relative group">
                           <pre className="bg-zinc-950 text-zinc-50 p-4 rounded-lg text-sm overflow-x-auto border border-zinc-800">
                             <code>{domainData.metaTag}</code>
                           </pre>
-                          <Button 
-                            size="sm" 
-                            variant="secondary" 
+                          <Button
+                            size="sm"
+                            variant="secondary"
                             className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                             onClick={copyToClipboard}
                           >
@@ -199,31 +204,31 @@ export default function NewScan() {
                           </Button>
                         </div>
                       </div>
-                      
+
                       <div className="bg-muted/50 p-4 rounded-xl border border-border">
-                        <p className="text-sm font-medium">2. Deploy your app, then click verify below.</p>
+                        <p className="text-sm font-medium">{t("newScan.verifyStep2")}</p>
                       </div>
 
                       <div className="flex gap-3 pt-4">
-                        <Button 
-                          variant="outline" 
-                          size="lg" 
+                        <Button
+                          variant="outline"
+                          size="lg"
                           className="flex-1"
                           onClick={() => setStep("input")}
                           disabled={confirmVerification.isPending}
                         >
-                          Back
+                          {t("newScan.back")}
                         </Button>
-                        <Button 
-                          size="lg" 
+                        <Button
+                          size="lg"
                           className="flex-[2] shadow-lg hover-elevate active-elevate-2"
                           onClick={onVerifyConfirm}
                           disabled={confirmVerification.isPending}
                         >
                           {confirmVerification.isPending ? (
-                            <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Verifying...</>
+                            <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> {t("newScan.verifying")}</>
                           ) : (
-                            <>I added it, Verify Now</>
+                            <>{t("newScan.verifyBtn")}</>
                           )}
                         </Button>
                       </div>
@@ -244,8 +249,8 @@ export default function NewScan() {
                     <div className="absolute inset-0 border-4 border-primary rounded-full border-t-transparent animate-spin"></div>
                     <ShieldAlert className="absolute inset-0 m-auto w-10 h-10 text-primary animate-pulse" />
                   </div>
-                  <h2 className="text-2xl font-bold mb-2">Starting Security Scan</h2>
-                  <p className="text-muted-foreground">Please wait while we initialize the scanning engines...</p>
+                  <h2 className="text-2xl font-bold mb-2">{t("newScan.scanningTitle")}</h2>
+                  <p className="text-muted-foreground">{t("newScan.scanningDesc")}</p>
                 </motion.div>
               )}
             </AnimatePresence>

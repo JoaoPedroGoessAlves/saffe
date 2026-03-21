@@ -1,11 +1,14 @@
 import { Link } from "wouter";
 import { useAuth } from "@workspace/replit-auth-web";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, LogOut, LayoutDashboard, Search } from "lucide-react";
+import { LanguageSelector } from "@/components/ui/language-selector";
+import { ShieldCheck, LogOut, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Navbar() {
   const { user, isAuthenticated, isLoading, login, logout } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 glass-panel">
@@ -21,13 +24,15 @@ export function Navbar() {
           {isAuthenticated && (
             <nav className="hidden md:flex items-center gap-1 ml-6">
               <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground px-4 py-2 rounded-md hover:bg-muted transition-colors">
-                Dashboard
+                {t("nav.dashboard")}
               </Link>
             </nav>
           )}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <LanguageSelector />
+
           {!isLoading && (
             <>
               {isAuthenticated ? (
@@ -35,10 +40,10 @@ export function Navbar() {
                   <Link href="/scan/new" className="hidden sm:block">
                     <Button size="sm" className="gap-2 rounded-full hover-elevate active-elevate-2">
                       <Search className="w-4 h-4" />
-                      New Scan
+                      {t("nav.newScan")}
                     </Button>
                   </Link>
-                  
+
                   <div className="flex items-center gap-3 pl-4 border-l border-border/50">
                     <Avatar className="w-8 h-8 border border-border/50">
                       <AvatarImage src={user?.profileImageUrl || undefined} />
@@ -46,14 +51,14 @@ export function Navbar() {
                         {user?.firstName?.[0] || user?.email?.[0] || 'U'}
                       </AvatarFallback>
                     </Avatar>
-                    <Button variant="ghost" size="icon" onClick={logout} className="text-muted-foreground hover:text-destructive" title="Log out">
+                    <Button variant="ghost" size="icon" onClick={logout} className="text-muted-foreground hover:text-destructive" title={t("nav.logOut")}>
                       <LogOut className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
               ) : (
                 <Button onClick={login} className="rounded-full px-6 hover-elevate active-elevate-2 bg-foreground text-background hover:bg-foreground/90">
-                  Sign In
+                  {t("nav.signIn")}
                 </Button>
               )}
             </>

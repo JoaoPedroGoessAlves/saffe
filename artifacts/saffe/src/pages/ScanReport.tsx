@@ -6,8 +6,8 @@ import { format } from "date-fns";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { 
-  CheckCircle2, XCircle, AlertTriangle, Info, 
+import {
+  CheckCircle2, XCircle, AlertTriangle, Info,
   ChevronDown, Copy, ShieldAlert, Mail, ArrowLeft, Loader2, Sparkles
 } from "lucide-react";
 
@@ -24,15 +24,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const emailSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-});
+type EmailFormData = { email: string };
 
 export default function ScanReport() {
   const { scanId } = useParams<{ scanId: string }>();
-  
-  // Poll every 2 seconds if status is not completed/failed
+  const { t } = useLanguage();
+
   const resolvedScanId = scanId || "";
   const { data: scan, isLoading, error } = useGetScan(resolvedScanId, {
     query: {
@@ -52,7 +51,7 @@ export default function ScanReport() {
           <Navbar />
           <div className="flex-1 flex flex-col items-center justify-center">
             <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-            <h2 className="text-xl font-bold">Loading Report...</h2>
+            <h2 className="text-xl font-bold">{t("scanReport.loading")}</h2>
           </div>
         </div>
       </ProtectedRoute>
@@ -66,10 +65,10 @@ export default function ScanReport() {
           <Navbar />
           <div className="flex-1 flex flex-col items-center justify-center p-4 text-center">
             <ShieldAlert className="w-16 h-16 text-destructive mb-4" />
-            <h2 className="text-2xl font-bold text-destructive mb-2">Scan Not Found</h2>
-            <p className="text-muted-foreground mb-6">We couldn't find the requested scan report.</p>
+            <h2 className="text-2xl font-bold text-destructive mb-2">{t("scanReport.notFound")}</h2>
+            <p className="text-muted-foreground mb-6">{t("scanReport.notFoundDesc")}</p>
             <Link href="/dashboard">
-              <Button variant="outline">Back to Dashboard</Button>
+              <Button variant="outline">{t("scanReport.backToDashboard")}</Button>
             </Link>
           </div>
         </div>
@@ -83,12 +82,12 @@ export default function ScanReport() {
     <ProtectedRoute>
       <div className="min-h-screen flex flex-col bg-background pb-20">
         <Navbar />
-        
+
         <main className="container max-w-5xl mx-auto px-4 py-8">
           <div className="mb-6">
             <Link href="/dashboard" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to Scans
+              {t("scanReport.backToScans")}
             </Link>
           </div>
 
@@ -99,13 +98,13 @@ export default function ScanReport() {
                 <div className="absolute inset-0 border-4 border-primary rounded-full border-t-transparent animate-spin"></div>
                 <SearchAnimation className="absolute inset-0 m-auto w-10 h-10 text-primary" />
               </div>
-              <h1 className="text-3xl font-display font-bold mb-3">Scanning your application</h1>
+              <h1 className="text-3xl font-display font-bold mb-3">{t("scanReport.scanning")}</h1>
               <p className="text-muted-foreground text-lg mb-8 max-w-md mx-auto">
-                We are currently analyzing <span className="font-semibold text-foreground">{scan.url}</span>. 
-                This usually takes a few seconds.
+                {t("scanReport.scanningDesc1")} <span className="font-semibold text-foreground">{scan.url}</span>.{" "}
+                {t("scanReport.scanningDesc2")}
               </p>
               <div className="inline-flex items-center px-4 py-2 bg-muted rounded-full text-sm font-medium animate-pulse">
-                Running checks...
+                {t("scanReport.runningChecks")}
               </div>
             </div>
           ) : (
@@ -116,7 +115,6 @@ export default function ScanReport() {
             >
               {/* Header Summary */}
               <div className="bg-card border border-border rounded-3xl p-6 md:p-10 shadow-lg mb-8 relative overflow-hidden">
-                {/* Background wash based on risk level */}
                 <div className={cn(
                   "absolute inset-0 opacity-5",
                   scan.riskLevel === 'critical' ? "bg-red-500" :
@@ -133,51 +131,50 @@ export default function ScanReport() {
                       </h1>
                     </div>
                     <p className="text-muted-foreground mb-6 flex items-center gap-2">
-                      Scanned on {format(new Date(scan.createdAt), "MMMM d, yyyy 'at' h:mm a")}
+                      {t("scanReport.scannedOn")} {format(new Date(scan.createdAt), `MMMM d, yyyy '${t("dateAt")}' h:mm a`)}
                     </p>
-                    
+
                     <div className="flex flex-wrap items-center gap-4">
                       <EmailReportDialog scanId={scan.id} />
                       <Link href="/scan/new">
                         <Button variant="outline" className="rounded-full shadow-sm hover-elevate">
-                          Run New Scan
+                          {t("scanReport.runNewScan")}
                         </Button>
                       </Link>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-start md:items-end">
-                    <p className="text-sm font-medium text-muted-foreground mb-2 uppercase tracking-wider">Overall Risk Score</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-2 uppercase tracking-wider">{t("scanReport.overallRisk")}</p>
                     <SeverityBadge level={scan.riskLevel} size="lg" className="text-xl px-6 py-2 shadow-sm" />
                   </div>
                 </div>
               </div>
 
-              {/* Encouraging Message if good, Warning if bad */}
               {scan.riskLevel === 'critical' || scan.riskLevel === 'high' ? (
                 <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/50 p-5 rounded-2xl mb-8 flex gap-4 text-red-900 dark:text-red-300 shadow-sm">
                   <AlertTriangle className="w-6 h-6 shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-lg mb-1">Action Required</h3>
-                    <p className="opacity-90">We found severe vulnerabilities that could let attackers compromise your app or users. Please fix these immediately using the provided AI prompts.</p>
+                    <h3 className="font-bold text-lg mb-1">{t("scanReport.actionRequired")}</h3>
+                    <p className="opacity-90">{t("scanReport.actionDesc")}</p>
                   </div>
                 </div>
               ) : scan.riskLevel === 'low' ? (
                 <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-900/50 p-5 rounded-2xl mb-8 flex gap-4 text-green-900 dark:text-green-300 shadow-sm">
                   <CheckCircle2 className="w-6 h-6 shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-lg mb-1">Great Job!</h3>
-                    <p className="opacity-90">Your application's security posture looks solid. No major vulnerabilities were detected in the public configuration.</p>
+                    <h3 className="font-bold text-lg mb-1">{t("scanReport.greatJob")}</h3>
+                    <p className="opacity-90">{t("scanReport.greatJobDesc")}</p>
                   </div>
                 </div>
               ) : null}
 
               {/* Results List */}
               <div className="space-y-6">
-                <h3 className="text-2xl font-display font-bold">Detailed Analysis</h3>
-                
+                <h3 className="text-2xl font-display font-bold">{t("scanReport.detailedAnalysis")}</h3>
+
                 {scan.results?.map((result, i) => (
-                  <motion.div 
+                  <motion.div
                     key={result.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -189,7 +186,7 @@ export default function ScanReport() {
 
                 {(!scan.results || scan.results.length === 0) && scan.status === 'completed' && (
                   <div className="text-center py-12 text-muted-foreground border rounded-2xl bg-muted/20">
-                    No results data available.
+                    {t("scanReport.noResults")}
                   </div>
                 )}
               </div>
@@ -205,10 +202,11 @@ function ResultCard({ result }: { result: ScanResult }) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const isPass = result.passed;
-  
-  const Icon = isPass ? CheckCircle2 : 
+
+  const Icon = isPass ? CheckCircle2 :
                result.severity === 'critical' || result.severity === 'high' ? XCircle :
                result.severity === 'medium' ? AlertTriangle : Info;
 
@@ -227,7 +225,7 @@ function ResultCard({ result }: { result: ScanResult }) {
     if (result.vibePrompt) {
       navigator.clipboard.writeText(result.vibePrompt);
       setCopied(true);
-      toast({ description: "Prompt copied to clipboard!" });
+      toast({ description: t("scanReport.promptCopied") });
       setTimeout(() => setCopied(false), 2000);
     }
   };
@@ -252,19 +250,19 @@ function ResultCard({ result }: { result: ScanResult }) {
             </div>
           </div>
         </CollapsibleTrigger>
-        
+
         <CollapsibleContent>
           <div className="px-5 pb-5 pt-2 ml-10 border-t border-border/50">
             {result.details && (
               <div className="mb-4 mt-4">
-                <h5 className="font-semibold text-sm mb-2 text-foreground">Why it matters:</h5>
+                <h5 className="font-semibold text-sm mb-2 text-foreground">{t("scanReport.whyItMatters")}</h5>
                 <p className="text-sm text-muted-foreground leading-relaxed">{result.details}</p>
               </div>
             )}
-            
+
             {!isPass && result.fixSuggestion && (
               <div className="mb-4">
-                <h5 className="font-semibold text-sm mb-2 text-foreground">How to fix it:</h5>
+                <h5 className="font-semibold text-sm mb-2 text-foreground">{t("scanReport.howToFix")}</h5>
                 <p className="text-sm text-muted-foreground leading-relaxed">{result.fixSuggestion}</p>
               </div>
             )}
@@ -274,16 +272,16 @@ function ResultCard({ result }: { result: ScanResult }) {
                 <div className="bg-zinc-900 px-4 py-2 border-b border-zinc-800 flex justify-between items-center">
                   <div className="flex items-center gap-2 text-xs font-medium text-zinc-400">
                     <Sparkles className="w-3.5 h-3.5 text-accent" />
-                    AI Prompt (Lovable / Bolt / Cursor)
+                    {t("scanReport.aiPromptLabel")}
                   </div>
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
+                  <Button
+                    size="sm"
+                    variant="ghost"
                     className="h-7 text-xs text-zinc-300 hover:text-white hover:bg-zinc-800"
                     onClick={handleCopy}
                   >
                     {copied ? <CheckCircle2 className="w-3.5 h-3.5 mr-1.5 text-success" /> : <Copy className="w-3.5 h-3.5 mr-1.5" />}
-                    {copied ? "Copied!" : "Copy Prompt"}
+                    {copied ? t("scanReport.copied") : t("scanReport.copyPrompt")}
                   </Button>
                 </div>
                 <div className="p-4 text-sm font-mono text-zinc-300 whitespace-pre-wrap leading-relaxed">
@@ -301,13 +299,18 @@ function ResultCard({ result }: { result: ScanResult }) {
 function EmailReportDialog({ scanId }: Readonly<{ scanId: string }>) {
   const [open, setOpen] = useState(false);
   const sendEmail = useSaffeSendReport();
+  const { t } = useLanguage();
 
-  const form = useForm<z.infer<typeof emailSchema>>({
+  const emailSchema = z.object({
+    email: z.string().email(t("validation.invalidEmail")),
+  });
+
+  const form = useForm<EmailFormData>({
     resolver: zodResolver(emailSchema),
     defaultValues: { email: "" },
   });
 
-  async function onSubmit(values: z.infer<typeof emailSchema>) {
+  async function onSubmit(values: EmailFormData) {
     try {
       await sendEmail.mutateAsync({ scanId, data: { scanId, email: values.email } });
       setOpen(false);
@@ -322,14 +325,14 @@ function EmailReportDialog({ scanId }: Readonly<{ scanId: string }>) {
       <DialogTrigger asChild>
         <Button className="rounded-full shadow-sm hover-elevate active-elevate-2 bg-foreground text-background hover:bg-foreground/90">
           <Mail className="w-4 h-4 mr-2" />
-          Email Report
+          {t("scanReport.emailReport")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Share Security Report</DialogTitle>
+          <DialogTitle>{t("scanReport.shareReport")}</DialogTitle>
           <DialogDescription>
-            Send a comprehensive HTML version of this report to your email, including a technical section for developers.
+            {t("scanReport.shareDesc")}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -339,9 +342,9 @@ function EmailReportDialog({ scanId }: Readonly<{ scanId: string }>) {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel>{t("scanReport.emailAddress")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="founder@startup.com" {...field} />
+                    <Input placeholder={t("scanReport.emailPlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -350,7 +353,7 @@ function EmailReportDialog({ scanId }: Readonly<{ scanId: string }>) {
             <div className="flex justify-end pt-4">
               <Button type="submit" disabled={sendEmail.isPending} className="hover-elevate active-elevate-2">
                 {sendEmail.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Send Report
+                {t("scanReport.sendReport")}
               </Button>
             </div>
           </form>
@@ -360,7 +363,6 @@ function EmailReportDialog({ scanId }: Readonly<{ scanId: string }>) {
   );
 }
 
-// Just a simple animated icon for the loading state
 function SearchAnimation(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>

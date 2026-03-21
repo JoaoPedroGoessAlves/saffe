@@ -9,13 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-
-const CHECKS = [
-  { icon: Lock, label: "Segredos e credenciais expostos" },
-  { icon: AlertTriangle, label: "Injeção de SQL e XSS" },
-  { icon: Shield, label: "Autenticação e controle de acesso" },
-  { icon: Code2, label: "Configurações inseguras no código" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function DeepScan() {
   return (
@@ -34,6 +28,14 @@ function DeepScanForm() {
   const [repoUrl, setRepoUrl] = useState("");
   const [, navigate] = useLocation();
   const createScan = useCreateJulesScan();
+  const { t } = useLanguage();
+
+  const checks = [
+    { icon: Lock, key: "deepScan.check1" },
+    { icon: AlertTriangle, key: "deepScan.check2" },
+    { icon: Shield, key: "deepScan.check3" },
+    { icon: Code2, key: "deepScan.check4" },
+  ];
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -54,11 +56,10 @@ function DeepScanForm() {
           <Github className="w-8 h-8 text-primary" />
         </div>
         <h1 className="text-4xl font-display font-bold text-foreground mb-3">
-          Deep Code Scan
+          {t("deepScan.title")}
         </h1>
         <p className="text-muted-foreground text-lg max-w-md mx-auto">
-          O Jules analisa seu repositório GitHub e identifica vulnerabilidades
-          diretamente no código-fonte — muito além do que um scan de URL consegue detectar.
+          {t("deepScan.subtitle")}
         </p>
       </div>
 
@@ -67,14 +68,14 @@ function DeepScanForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="repoUrl" className="text-sm font-semibold">
-                URL do Repositório GitHub
+                {t("deepScan.repoLabel")}
               </Label>
               <div className="relative">
                 <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="repoUrl"
                   type="url"
-                  placeholder="https://github.com/seu-usuario/seu-repositorio"
+                  placeholder={t("deepScan.repoPlaceholder")}
                   className="pl-10 h-12 text-base"
                   value={repoUrl}
                   onChange={(e) => setRepoUrl(e.target.value)}
@@ -83,7 +84,7 @@ function DeepScanForm() {
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Apenas repositórios públicos são suportados no momento.
+                {t("deepScan.publicOnly")}
               </p>
             </div>
 
@@ -96,11 +97,11 @@ function DeepScanForm() {
               {createScan.isPending ? (
                 <>
                   <span className="animate-spin mr-2">⏳</span>
-                  Iniciando análise...
+                  {t("deepScan.initiating")}
                 </>
               ) : (
                 <>
-                  Analisar com Jules
+                  {t("deepScan.analyzeBtn")}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </>
               )}
@@ -110,19 +111,19 @@ function DeepScanForm() {
       </Card>
 
       <div className="mt-8 grid grid-cols-2 gap-3">
-        {CHECKS.map(({ icon: Icon, label }) => (
+        {checks.map(({ icon: Icon, key }) => (
           <div
-            key={label}
+            key={key}
             className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border/50 text-sm text-muted-foreground"
           >
             <Icon className="w-4 h-4 text-primary shrink-0" />
-            <span>{label}</span>
+            <span>{t(key)}</span>
           </div>
         ))}
       </div>
 
       <p className="text-center text-xs text-muted-foreground mt-6">
-        A análise do Jules pode levar alguns minutos dependendo do tamanho do repositório.
+        {t("deepScan.footerNote")}
       </p>
     </motion.div>
   );

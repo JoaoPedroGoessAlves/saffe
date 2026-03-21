@@ -18,23 +18,15 @@ import {
   useSaffeConfirmGithubVerification,
   useSaffeCreateCostAnalysis,
 } from "@/hooks/use-cost-estimator";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const repoUrlSchema = z.object({
-  repoUrl: z
-    .string()
-    .url("Please enter a valid URL")
-    .refine((url) => {
-      try {
-        return new URL(url).hostname === "github.com";
-      } catch {
-        return false;
-      }
-    }, "Must be a GitHub repository URL (https://github.com/owner/repo)"),
-});
+type RepoFormData = { repoUrl: string };
 
 type Step = "input" | "verify" | "analyzing";
 
 export default function CostEstimator() {
+  const { t } = useLanguage();
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen flex flex-col bg-background">
@@ -42,10 +34,10 @@ export default function CostEstimator() {
         <main className="flex-1 container max-w-3xl mx-auto px-4 py-12 md:py-20 flex flex-col items-center justify-center">
           <div className="w-full text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-              Dev Cost Estimator
+              {t("costEstimator.title")}
             </h1>
             <p className="text-muted-foreground text-lg">
-              Connect your GitHub repository to get a professional cost estimate for rebuilding your app from scratch.
+              {t("costEstimator.subtitle")}
             </p>
           </div>
           <CostEstimatorWizard />
@@ -58,6 +50,7 @@ export default function CostEstimator() {
 function CostEstimatorWizard() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const [step, setStep] = useState<Step>("input");
   const [repoData, setRepoData] = useState<{
@@ -72,12 +65,25 @@ function CostEstimatorWizard() {
   const confirmVerification = useSaffeConfirmGithubVerification();
   const createAnalysis = useSaffeCreateCostAnalysis();
 
-  const form = useForm<z.infer<typeof repoUrlSchema>>({
+  const repoUrlSchema = z.object({
+    repoUrl: z
+      .string()
+      .url(t("validation.invalidRepoUrl"))
+      .refine((url) => {
+        try {
+          return new URL(url).hostname === "github.com";
+        } catch {
+          return false;
+        }
+      }, t("validation.notGithubUrl")),
+  });
+
+  const form = useForm<RepoFormData>({
     resolver: zodResolver(repoUrlSchema),
     defaultValues: { repoUrl: "" },
   });
 
-  async function onRepoSubmit(values: z.infer<typeof repoUrlSchema>) {
+  async function onRepoSubmit(values: RepoFormData) {
     try {
       const res = await initVerification.mutateAsync({ data: { repoUrl: values.repoUrl } });
 
@@ -107,8 +113,8 @@ function CostEstimatorWizard() {
       } else {
         toast({
           variant: "destructive",
-          title: "Not verified yet",
-          description: res.message || "File not found. Please add the saffe-verify.txt file and try again.",
+          title: t("costEstimator.notVerifiedTitle"),
+          description: res.message || t("costEstimator.notVerifiedDesc"),
         });
       }
     } catch {
@@ -130,7 +136,7 @@ function CostEstimatorWizard() {
     if (!repoData) return;
     navigator.clipboard.writeText(repoData.token);
     setCopied(true);
-    toast({ description: "Token copied to clipboard" });
+    toast({ description: t("costEstimator.tokenCopied") });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -149,10 +155,10 @@ function CostEstimatorWizard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Github className="w-5 h-5 text-primary" />
-                  Enter GitHub Repository URL
+                  {t("costEstimator.inputTitle")}
                 </CardTitle>
                 <CardDescription>
-                  Paste the URL of a public GitHub repository you own to estimate its development cost.
+                  {t("costEstimator.inputDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -166,7 +172,7 @@ function CostEstimatorWizard() {
                           <FormLabel className="sr-only">Repository URL</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="https://github.com/username/my-repo"
+                              placeholder={t("costEstimator.repoPlaceholder")}
                               className="h-14 text-lg bg-muted/30 focus-visible:ring-primary/20"
                               {...field}
                             />
@@ -183,11 +189,11 @@ function CostEstimatorWizard() {
                     >
                       {initVerification.isPending ? (
                         <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Preparing...
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" /> {t("costEstimator.preparing")}
                         </>
                       ) : (
                         <>
-                          Continue <ArrowRight className="ml-2 h-5 w-5" />
+                          {t("costEstimator.continue")} <ArrowRight className="ml-2 h-5 w-5" />
                         </>
                       )}
                     </Button>
@@ -210,20 +216,20 @@ function CostEstimatorWizard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Github className="w-5 h-5 text-accent" />
-                  Verify Repository Ownership
+                  {t("costEstimator.verifyTitle")}
                 </CardTitle>
                 <CardDescription>
-                  Prove you own{" "}
-                  <strong className="text-foreground font-mono">{repoData.repoSlug}</strong> before
-                  we analyze it.
+                  {t("costEstimator.verifyDesc1")}{" "}
+                  <strong className="text-foreground font-mono">{repoData.repoSlug}</strong>{" "}
+                  {t("costEstimator.verifyDesc2")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="bg-muted/50 p-4 rounded-xl border border-border">
                   <p className="text-sm font-medium mb-3">
-                    1. Create a file named{" "}
-                    <code className="bg-muted px-1.5 py-0.5 rounded text-xs">saffe-verify.txt</code> at
-                    the root of your repository with this exact content:
+                    {t("costEstimator.verifyStep1")}{" "}
+                    <code className="bg-muted px-1.5 py-0.5 rounded text-xs">saffe-verify.txt</code>{" "}
+                    {t("costEstimator.verifyStep1b")}
                   </p>
                   <div className="relative group">
                     <pre className="bg-zinc-950 text-zinc-50 p-4 rounded-lg text-sm overflow-x-auto border border-zinc-800">
@@ -242,7 +248,7 @@ function CostEstimatorWizard() {
 
                 <div className="bg-muted/50 p-4 rounded-xl border border-border">
                   <p className="text-sm font-medium">
-                    2. Commit and push the file to your default branch, then click verify below.
+                    {t("costEstimator.verifyStep2")}
                   </p>
                 </div>
 
@@ -254,7 +260,7 @@ function CostEstimatorWizard() {
                     onClick={() => setStep("input")}
                     disabled={confirmVerification.isPending}
                   >
-                    Back
+                    {t("costEstimator.back")}
                   </Button>
                   <Button
                     size="lg"
@@ -264,10 +270,10 @@ function CostEstimatorWizard() {
                   >
                     {confirmVerification.isPending ? (
                       <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Verifying...
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" /> {t("costEstimator.verifying")}
                       </>
                     ) : (
-                      <>I added it, Verify Now</>
+                      <>{t("costEstimator.verifyBtn")}</>
                     )}
                   </Button>
                 </div>
@@ -288,9 +294,9 @@ function CostEstimatorWizard() {
               <div className="absolute inset-0 border-4 border-primary rounded-full border-t-transparent animate-spin"></div>
               <DollarSign className="absolute inset-0 m-auto w-10 h-10 text-primary animate-pulse" />
             </div>
-            <h2 className="text-2xl font-bold mb-2">Analyzing Repository</h2>
+            <h2 className="text-2xl font-bold mb-2">{t("costEstimator.analyzingTitle")}</h2>
             <p className="text-muted-foreground">
-              Cloning and running code analysis — this may take up to a minute...
+              {t("costEstimator.analyzingDesc")}
             </p>
           </motion.div>
         )}

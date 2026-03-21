@@ -11,6 +11,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const SEVERITY_COLORS: Record<string, string> = {
   critical: "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800/50",
@@ -26,13 +27,6 @@ const SEVERITY_BORDER: Record<string, string> = {
   low: "border-l-green-500",
 };
 
-const SEVERITY_LABELS: Record<string, string> = {
-  critical: "Crítico",
-  high: "Alto",
-  medium: "Médio",
-  low: "Baixo",
-};
-
 const RISK_BG: Record<string, string> = {
   critical: "bg-red-600",
   high: "bg-orange-500",
@@ -43,6 +37,7 @@ const RISK_BG: Record<string, string> = {
 export default function DeepScanResult() {
   const { id } = useParams<{ id: string }>();
   const { data: analysis, isLoading } = useGetJulesScan(id || "");
+  const { t } = useLanguage();
 
   return (
     <ProtectedRoute>
@@ -52,14 +47,14 @@ export default function DeepScanResult() {
           <Link href="/dashboard">
             <Button variant="ghost" size="sm" className="mb-6 -ml-2">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Dashboard
+              {t("deepResult.backBtn")}
             </Button>
           </Link>
 
           {isLoading && !analysis ? (
-            <LoadingState message="Carregando análise..." />
+            <LoadingState message={t("deepResult.loadingMsg")} />
           ) : !analysis ? (
-            <ErrorState message="Análise não encontrada." />
+            <ErrorState message={t("deepResult.notFound")} />
           ) : analysis.status === "pending" || analysis.status === "running" ? (
             <PendingState
               repoOwner={analysis.repoOwner}
@@ -67,7 +62,7 @@ export default function DeepScanResult() {
               progressMessage={analysis.progressMessage}
             />
           ) : analysis.status === "failed" ? (
-            <ErrorState message={analysis.errorMessage ?? "A análise falhou. Tente novamente."} />
+            <ErrorState message={analysis.errorMessage ?? t("deepResult.errorTitle")} />
           ) : (
             <ResultView analysis={analysis} />
           )}
@@ -87,13 +82,14 @@ function LoadingState({ message }: { message: string }) {
 }
 
 function ErrorState({ message }: { message: string }) {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
       <AlertTriangle className="w-12 h-12 text-destructive" />
-      <h2 className="text-xl font-bold text-destructive">Erro na análise</h2>
+      <h2 className="text-xl font-bold text-destructive">{t("deepResult.errorTitle")}</h2>
       <p className="text-muted-foreground max-w-md">{message}</p>
       <Link href="/deep-scan">
-        <Button variant="outline" className="mt-2">Tentar novamente</Button>
+        <Button variant="outline" className="mt-2">{t("deepResult.retryBtn")}</Button>
       </Link>
     </div>
   );
@@ -108,6 +104,7 @@ function PendingState({
   repoName: string;
   progressMessage: string | null;
 }) {
+  const { t } = useLanguage();
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -126,13 +123,13 @@ function PendingState({
       </div>
       <div>
         <h2 className="text-2xl font-display font-bold mb-2">
-          Jules está analisando o código
+          {t("deepResult.pendingTitle")}
         </h2>
         <p className="text-muted-foreground text-lg mb-1">
           <span className="font-semibold text-foreground">{repoOwner}/{repoName}</span>
         </p>
         <p className="text-muted-foreground text-sm">
-          Isso pode levar alguns minutos. Esta página atualiza automaticamente.
+          {t("deepResult.pendingNote")}
         </p>
       </div>
       {progressMessage && (
@@ -160,6 +157,7 @@ function PendingState({
 }
 
 function ResultView({ analysis }: { analysis: ReturnType<typeof useGetJulesScan>["data"] }) {
+  const { t } = useLanguage();
   if (!analysis) return null;
   const result = analysis.result as {
     riskLevel?: string;
@@ -175,6 +173,15 @@ function ResultView({ analysis }: { analysis: ReturnType<typeof useGetJulesScan>
   const riskLevel = result?.riskLevel ?? "low";
   const findings = result?.findings ?? [];
   const hasStructured = findings.length > 0;
+
+  const severityLabels: Record<string, string> = {
+    critical: t("deepResult.criticalLabel"),
+    high: t("deepResult.highLabel"),
+    medium: t("deepResult.mediumLabel"),
+    low: t("deepResult.lowLabel"),
+  };
+
+  const totalFindings = result?.totalFindings ?? findings.length;
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
@@ -192,11 +199,11 @@ function ResultView({ analysis }: { analysis: ReturnType<typeof useGetJulesScan>
             </a>
           </div>
           <h1 className="text-3xl font-display font-bold text-foreground">
-            Relatório de Segurança
+            {t("deepResult.securityReport")}
           </h1>
           {analysis.completedAt && (
             <p className="text-sm text-muted-foreground mt-1">
-              Concluído em {format(new Date(analysis.completedAt), "dd/MM/yyyy 'às' HH:mm")}
+              {t("deepResult.completedAt")} {format(new Date(analysis.completedAt), `dd/MM/yyyy '${t("dateAt")}' HH:mm`)}
             </p>
           )}
         </div>
@@ -206,27 +213,28 @@ function ResultView({ analysis }: { analysis: ReturnType<typeof useGetJulesScan>
         <>
           <div className={`rounded-2xl p-6 text-white ${RISK_BG[riskLevel] ?? "bg-gray-600"}`}>
             <p className="text-sm font-medium uppercase tracking-widest opacity-80 mb-1">
-              Nível de Risco Geral
+              {t("deepResult.overallRisk")}
             </p>
             <p className="text-4xl font-display font-black">
-              {SEVERITY_LABELS[riskLevel] ?? riskLevel}
+              {severityLabels[riskLevel] ?? riskLevel}
             </p>
             <p className="text-sm opacity-90 mt-2">
-              {result?.totalFindings ?? findings.length} vulnerabilidade{(result?.totalFindings ?? findings.length) !== 1 ? "s" : ""} encontrada{(result?.totalFindings ?? findings.length) !== 1 ? "s" : ""}
+              {totalFindings}{" "}
+              {totalFindings !== 1 ? t("deepResult.findings") : t("deepResult.findingsOne")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: "Crítico", count: result?.criticalCount ?? 0, color: "text-red-600" },
-              { label: "Alto", count: result?.highCount ?? 0, color: "text-orange-500" },
-              { label: "Médio", count: result?.mediumCount ?? 0, color: "text-yellow-600" },
-              { label: "Baixo", count: result?.lowCount ?? 0, color: "text-green-600" },
-            ].map(({ label, count, color }) => (
-              <Card key={label} className="text-center">
+              { labelKey: "deepResult.criticalLabel", count: result?.criticalCount ?? 0, color: "text-red-600" },
+              { labelKey: "deepResult.highLabel", count: result?.highCount ?? 0, color: "text-orange-500" },
+              { labelKey: "deepResult.mediumLabel", count: result?.mediumCount ?? 0, color: "text-yellow-600" },
+              { labelKey: "deepResult.lowLabel", count: result?.lowCount ?? 0, color: "text-green-600" },
+            ].map(({ labelKey, count, color }) => (
+              <Card key={labelKey} className="text-center">
                 <CardContent className="p-4">
                   <p className={`text-3xl font-display font-bold ${color}`}>{count}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{label}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{t(labelKey)}</p>
                 </CardContent>
               </Card>
             ))}
@@ -236,35 +244,35 @@ function ResultView({ analysis }: { analysis: ReturnType<typeof useGetJulesScan>
             <div className="text-center py-16 bg-green-50 dark:bg-green-900/10 rounded-2xl border border-green-200 dark:border-green-800/30">
               <ShieldCheck className="w-12 h-12 text-green-600 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-green-700 dark:text-green-400 mb-2">
-                Nenhuma vulnerabilidade encontrada!
+                {t("deepResult.noVulnerabilities")}
               </h3>
               <p className="text-muted-foreground text-sm">
-                O Jules não identificou problemas de segurança neste repositório.
+                {t("deepResult.noVulnDesc")}
               </p>
             </div>
           ) : (
             <div className="space-y-4">
               <h2 className="text-xl font-display font-bold flex items-center gap-2">
                 <ShieldAlert className="w-5 h-5 text-destructive" />
-                Vulnerabilidades Encontradas
+                {t("deepResult.vulnerabilitiesFound")}
               </h2>
               <AnimatePresence>
                 {findings.map((finding, i) => (
-                  <FindingCard key={i} finding={finding} index={i} />
+                  <FindingCard key={i} finding={finding} index={i} severityLabels={severityLabels} />
                 ))}
               </AnimatePresence>
             </div>
           )}
         </>
       ) : (
-        <RawOutput message={result?.rawMessage ?? "Sem resultado disponível."} />
+        <RawOutput message={result?.rawMessage ?? t("deepResult.noResult")} />
       )}
 
       <div className="pt-4 border-t border-border">
         <Link href="/deep-scan">
           <Button className="rounded-full">
             <Github className="w-4 h-4 mr-2" />
-            Nova Análise
+            {t("deepResult.newAnalysis")}
           </Button>
         </Link>
       </div>
@@ -272,8 +280,17 @@ function ResultView({ analysis }: { analysis: ReturnType<typeof useGetJulesScan>
   );
 }
 
-function FindingCard({ finding, index }: { finding: JulesFinding; index: number }) {
+function FindingCard({
+  finding,
+  index,
+  severityLabels,
+}: {
+  finding: JulesFinding;
+  index: number;
+  severityLabels: Record<string, string>;
+}) {
   const [expanded, setExpanded] = useState(index === 0);
+  const { t } = useLanguage();
   const borderColor = SEVERITY_BORDER[finding.severity] ?? "border-l-gray-400";
   const badgeClass = SEVERITY_COLORS[finding.severity] ?? "";
 
@@ -294,7 +311,7 @@ function FindingCard({ finding, index }: { finding: JulesFinding; index: number 
             </CardTitle>
             <div className="flex items-center gap-2 shrink-0">
               <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border ${badgeClass}`}>
-                {SEVERITY_LABELS[finding.severity] ?? finding.severity}
+                {severityLabels[finding.severity] ?? finding.severity}
               </span>
               {expanded ? (
                 <ChevronUp className="w-4 h-4 text-muted-foreground" />
@@ -326,7 +343,7 @@ function FindingCard({ finding, index }: { finding: JulesFinding; index: number 
                 {finding.fixSuggestion && (
                   <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 rounded-lg p-3">
                     <p className="text-xs font-semibold text-green-700 dark:text-green-400 mb-1">
-                      ✅ Como corrigir:
+                      ✅ {t("deepResult.howToFix")}
                     </p>
                     <p className="text-sm text-green-800 dark:text-green-300 leading-relaxed">
                       {finding.fixSuggestion}
@@ -343,9 +360,10 @@ function FindingCard({ finding, index }: { finding: JulesFinding; index: number 
 }
 
 function RawOutput({ message }: { message: string }) {
+  const { t } = useLanguage();
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-muted-foreground">Resultado da análise</h2>
+      <h2 className="text-lg font-semibold text-muted-foreground">{t("deepResult.rawOutput")}</h2>
       <div className="bg-muted rounded-xl p-5 text-sm font-mono whitespace-pre-wrap leading-relaxed max-h-[600px] overflow-y-auto">
         {message}
       </div>
