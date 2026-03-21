@@ -1,16 +1,23 @@
 export default function Slide3Solucao() {
+  const blue = "hsl(212, 100%, 44%)";
+  const blueLight = "rgba(0, 112, 224, 0.08)";
+  const blueBorder = "rgba(0, 112, 224, 0.20)";
+
   return (
-    <div className="relative w-screen h-screen overflow-hidden" style={{ background: "#1A1919" }}>
+    <div
+      className="relative w-screen h-screen overflow-hidden"
+      style={{ background: "#ffffff", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+    >
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 50% 60% at 20% 50%, rgba(255,59,0,0.10) 0%, transparent 65%)",
+            "radial-gradient(ellipse 50% 60% at 20% 50%, rgba(0,112,224,0.06) 0%, transparent 65%)",
         }}
       />
       <div
         className="absolute top-0 left-0 w-full"
-        style={{ height: "4px", background: "#FF3B00" }}
+        style={{ height: "4px", background: blue }}
       />
 
       <div
@@ -22,10 +29,10 @@ export default function Slide3Solucao() {
             <div
               style={{
                 fontSize: "1vw",
-                color: "#FF3B00",
+                color: blue,
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                fontWeight: 700,
+                fontWeight: 500,
                 marginBottom: "1.5vh",
               }}
             >
@@ -38,9 +45,9 @@ export default function Slide3Solucao() {
               <h2
                 style={{
                   fontSize: "4.2vw",
-                  fontWeight: 900,
-                  color: "#F8F5F1",
-                  letterSpacing: "-0.04em",
+                  fontWeight: 200,
+                  color: "#1c1c1e",
+                  letterSpacing: "-0.05em",
                   lineHeight: 1.05,
                   margin: 0,
                 }}
@@ -50,10 +57,11 @@ export default function Slide3Solucao() {
               <p
                 style={{
                   fontSize: "1.4vw",
-                  color: "#9A9A9A",
+                  color: "#636366",
                   marginTop: "2.5vh",
                   lineHeight: 1.6,
                   maxWidth: "38vw",
+                  fontWeight: 300,
                 }}
               >
                 Uma ferramenta pensada para o movimento vibe coding — onde a velocidade de criação supera a consciência de segurança. Saffe fecha essa lacuna, automaticamente.
@@ -63,12 +71,13 @@ export default function Slide3Solucao() {
                   display: "inline-block",
                   marginTop: "3vh",
                   padding: "1.2vh 2.5vw",
-                  background: "#FF3B00",
+                  background: blue,
                   fontSize: "1.2vw",
-                  fontWeight: 700,
-                  color: "#F8F5F1",
-                  letterSpacing: "0.05em",
+                  fontWeight: 500,
+                  color: "#ffffff",
+                  letterSpacing: "0.04em",
                   textTransform: "uppercase",
+                  borderRadius: "0.5vw",
                 }}
               >
                 Ship fast. Stay Saffe.
@@ -78,10 +87,14 @@ export default function Slide3Solucao() {
             <div
               style={{
                 flex: 1,
-                background: "#222020",
-                border: "1px solid #2E2B2B",
+                background: "rgba(255,255,255,0.85)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: `1px solid rgba(0,0,0,0.08)`,
+                boxShadow: "0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
                 padding: "2.5vh 2vw",
                 fontFamily: "monospace",
+                borderRadius: "1vw",
               }}
             >
               <div
@@ -90,43 +103,43 @@ export default function Slide3Solucao() {
                   gap: "0.5vw",
                   marginBottom: "1.5vh",
                   paddingBottom: "1.5vh",
-                  borderBottom: "1px solid #2E2B2B",
+                  borderBottom: "1px solid rgba(0,0,0,0.08)",
                 }}
               >
-                <div style={{ width: "0.8vw", height: "0.8vw", background: "#FF5F57" }} />
-                <div style={{ width: "0.8vw", height: "0.8vw", background: "#FEBC2E" }} />
-                <div style={{ width: "0.8vw", height: "0.8vw", background: "#28C840" }} />
-                <span style={{ marginLeft: "1vw", fontSize: "0.9vw", color: "#9A9A9A" }}>saffe-report.json</span>
+                <div style={{ width: "0.8vw", height: "0.8vw", background: "#FF5F57", borderRadius: "50%" }} />
+                <div style={{ width: "0.8vw", height: "0.8vw", background: "#FEBC2E", borderRadius: "50%" }} />
+                <div style={{ width: "0.8vw", height: "0.8vw", background: "#28C840", borderRadius: "50%" }} />
+                <span style={{ marginLeft: "1vw", fontSize: "0.9vw", color: "#8e8e93", fontFamily: "monospace" }}>saffe-report.json</span>
               </div>
               <div className="flex flex-col" style={{ gap: "1.2vh" }}>
-                <div style={{ background: "rgba(255,59,0,0.12)", border: "1px solid rgba(255,59,0,0.35)", padding: "1vh 1.2vw" }}>
-                  <div style={{ fontSize: "0.85vw", color: "#FF3B00", fontWeight: 700, marginBottom: "0.5vh" }}>CRITICAL — Chave de API exposta</div>
-                  <div style={{ fontSize: "0.85vw", color: "#9A9A9A" }}>Arquivo: /src/config.js · Linha 42</div>
+                <div style={{ background: "rgba(220,38,38,0.06)", border: "1px solid rgba(220,38,38,0.20)", padding: "1vh 1.2vw", borderRadius: "0.5vw" }}>
+                  <div style={{ fontSize: "0.85vw", color: "#dc2626", fontWeight: 600, marginBottom: "0.5vh" }}>CRITICAL — Chave de API exposta</div>
+                  <div style={{ fontSize: "0.85vw", color: "#8e8e93" }}>Arquivo: /src/config.js · Linha 42</div>
                 </div>
-                <div style={{ background: "rgba(255,165,0,0.08)", border: "1px solid rgba(255,165,0,0.25)", padding: "1vh 1.2vw" }}>
-                  <div style={{ fontSize: "0.85vw", color: "#FEBC2E", fontWeight: 700, marginBottom: "0.5vh" }}>HIGH — CORS aberto para qualquer origem</div>
-                  <div style={{ fontSize: "0.85vw", color: "#9A9A9A" }}>Rota: /api/* · Access-Control-Allow-Origin: *</div>
+                <div style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.20)", padding: "1vh 1.2vw", borderRadius: "0.5vw" }}>
+                  <div style={{ fontSize: "0.85vw", color: "#d97706", fontWeight: 600, marginBottom: "0.5vh" }}>HIGH — CORS aberto para qualquer origem</div>
+                  <div style={{ fontSize: "0.85vw", color: "#8e8e93" }}>Rota: /api/* · Access-Control-Allow-Origin: *</div>
                 </div>
-                <div style={{ background: "rgba(255,165,0,0.08)", border: "1px solid rgba(255,165,0,0.25)", padding: "1vh 1.2vw" }}>
-                  <div style={{ fontSize: "0.85vw", color: "#FEBC2E", fontWeight: 700, marginBottom: "0.5vh" }}>HIGH — Endpoint sem autenticação</div>
-                  <div style={{ fontSize: "0.85vw", color: "#9A9A9A" }}>GET /admin/users · sem token de sessão</div>
+                <div style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.20)", padding: "1vh 1.2vw", borderRadius: "0.5vw" }}>
+                  <div style={{ fontSize: "0.85vw", color: "#d97706", fontWeight: 600, marginBottom: "0.5vh" }}>HIGH — Endpoint sem autenticação</div>
+                  <div style={{ fontSize: "0.85vw", color: "#8e8e93" }}>GET /admin/users · sem token de sessão</div>
                 </div>
-                <div style={{ background: "rgba(100,255,100,0.06)", border: "1px solid rgba(100,255,100,0.2)", padding: "1vh 1.2vw" }}>
-                  <div style={{ fontSize: "0.85vw", color: "#28C840", fontWeight: 700, marginBottom: "0.5vh" }}>INFO — Headers de segurança ausentes</div>
-                  <div style={{ fontSize: "0.85vw", color: "#9A9A9A" }}>CSP, X-Frame-Options, HSTS não configurados</div>
+                <div style={{ background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.20)", padding: "1vh 1.2vw", borderRadius: "0.5vw" }}>
+                  <div style={{ fontSize: "0.85vw", color: "#059669", fontWeight: 600, marginBottom: "0.5vh" }}>INFO — Headers de segurança ausentes</div>
+                  <div style={{ fontSize: "0.85vw", color: "#8e8e93" }}>CSP, X-Frame-Options, HSTS não configurados</div>
                 </div>
               </div>
               <div
                 style={{
                   marginTop: "1.5vh",
                   paddingTop: "1.5vh",
-                  borderTop: "1px solid #2E2B2B",
+                  borderTop: "1px solid rgba(0,0,0,0.08)",
                   display: "flex",
                   justifyContent: "space-between",
                 }}
               >
-                <span style={{ fontSize: "0.85vw", color: "#9A9A9A" }}>4 vulnerabilidades encontradas</span>
-                <span style={{ fontSize: "0.85vw", color: "#FF3B00", fontWeight: 700 }}>Risco: CRÍTICO</span>
+                <span style={{ fontSize: "0.85vw", color: "#8e8e93" }}>4 vulnerabilidades encontradas</span>
+                <span style={{ fontSize: "0.85vw", color: "#dc2626", fontWeight: 600 }}>Risco: CRÍTICO</span>
               </div>
             </div>
           </div>

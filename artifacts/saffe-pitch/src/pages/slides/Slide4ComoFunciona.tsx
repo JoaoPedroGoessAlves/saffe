@@ -1,16 +1,24 @@
 export default function Slide4ComoFunciona() {
+  const blue = "hsl(212, 100%, 44%)";
+  const blueLight = "rgba(0, 112, 224, 0.08)";
+  const blueBorder = "rgba(0, 112, 224, 0.20)";
+  const blueBorderStrong = "rgba(0, 112, 224, 0.45)";
+
   return (
-    <div className="relative w-screen h-screen overflow-hidden" style={{ background: "#1A1919" }}>
+    <div
+      className="relative w-screen h-screen overflow-hidden"
+      style={{ background: "#f5f5f7", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+    >
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 50% 50% at 50% 100%, rgba(255,59,0,0.08) 0%, transparent 70%)",
+            "radial-gradient(ellipse 50% 50% at 50% 100%, rgba(0,112,224,0.05) 0%, transparent 70%)",
         }}
       />
       <div
         className="absolute top-0 left-0 w-full"
-        style={{ height: "4px", background: "#FF3B00" }}
+        style={{ height: "4px", background: blue }}
       />
 
       <div
@@ -21,10 +29,10 @@ export default function Slide4ComoFunciona() {
           <div
             style={{
               fontSize: "1vw",
-              color: "#FF3B00",
+              color: blue,
               letterSpacing: "0.2em",
               textTransform: "uppercase",
-              fontWeight: 700,
+              fontWeight: 500,
               marginBottom: "1vh",
             }}
           >
@@ -33,9 +41,9 @@ export default function Slide4ComoFunciona() {
           <h2
             style={{
               fontSize: "3.5vw",
-              fontWeight: 800,
-              color: "#F8F5F1",
-              letterSpacing: "-0.03em",
+              fontWeight: 200,
+              color: "#1c1c1e",
+              letterSpacing: "-0.04em",
               lineHeight: 1.1,
               margin: 0,
             }}
@@ -51,11 +59,15 @@ export default function Slide4ComoFunciona() {
           <div
             style={{
               flex: 1,
-              background: "#222020",
-              border: "1px solid #2E2B2B",
+              background: "rgba(255,255,255,0.85)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: `1px solid rgba(0,0,0,0.08)`,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
               padding: "3.5vh 2.5vw",
               position: "relative",
               overflow: "hidden",
+              borderRadius: "1vw",
             }}
           >
             <div
@@ -65,22 +77,24 @@ export default function Slide4ComoFunciona() {
                 left: 0,
                 right: 0,
                 height: "3px",
-                background: "#FF3B00",
+                background: blue,
+                borderRadius: "1vw 1vw 0 0",
               }}
             />
             <div
               style={{
                 width: "3.5vw",
                 height: "3.5vw",
-                background: "rgba(255,59,0,0.15)",
-                border: "1px solid rgba(255,59,0,0.4)",
+                background: blueLight,
+                border: `1px solid ${blueBorder}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: "2.5vh",
+                borderRadius: "0.8vw",
               }}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FF3B00" strokeWidth="2" strokeLinecap="square" style={{ width: "1.8vw", height: "1.8vw" }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke={blue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: "1.8vw", height: "1.8vw" }}>
                 <circle cx="11" cy="11" r="8" />
                 <path d="M21 21l-4.35-4.35" />
               </svg>
@@ -88,8 +102,8 @@ export default function Slide4ComoFunciona() {
             <div
               style={{
                 fontSize: "0.8vw",
-                color: "#FF3B00",
-                fontWeight: 700,
+                color: blue,
+                fontWeight: 600,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 marginBottom: "1vh",
@@ -100,8 +114,8 @@ export default function Slide4ComoFunciona() {
             <h3
               style={{
                 fontSize: "1.6vw",
-                fontWeight: 800,
-                color: "#F8F5F1",
+                fontWeight: 400,
+                color: "#1c1c1e",
                 margin: 0,
                 marginBottom: "1.5vh",
                 letterSpacing: "-0.02em",
@@ -109,7 +123,7 @@ export default function Slide4ComoFunciona() {
             >
               Scan de URL
             </h3>
-            <p style={{ fontSize: "1.1vw", color: "#9A9A9A", lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: "1.1vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
               Informe a URL do seu app. Saffe analisa headers HTTP, endpoints expostos, configurações de CORS e presença de dados sensíveis em respostas públicas.
             </p>
           </div>
@@ -117,11 +131,15 @@ export default function Slide4ComoFunciona() {
           <div
             style={{
               flex: 1,
-              background: "#222020",
-              border: "1px solid #FF3B00",
+              background: "rgba(255,255,255,0.95)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: `1.5px solid ${blueBorderStrong}`,
+              boxShadow: `0 4px 24px rgba(0,112,224,0.12), 0 1px 4px rgba(0,112,224,0.08)`,
               padding: "3.5vh 2.5vw",
               position: "relative",
               overflow: "hidden",
+              borderRadius: "1vw",
             }}
           >
             <div
@@ -131,30 +149,32 @@ export default function Slide4ComoFunciona() {
                 left: 0,
                 right: 0,
                 height: "3px",
-                background: "#FF3B00",
+                background: blue,
+                borderRadius: "1vw 1vw 0 0",
               }}
             />
             <div
               style={{
                 width: "3.5vw",
                 height: "3.5vw",
-                background: "rgba(255,59,0,0.2)",
-                border: "1px solid rgba(255,59,0,0.6)",
+                background: "rgba(0, 112, 224, 0.12)",
+                border: `1px solid ${blueBorderStrong}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: "2.5vh",
+                borderRadius: "0.8vw",
               }}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FF3B00" strokeWidth="2" strokeLinecap="square" style={{ width: "1.8vw", height: "1.8vw" }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke={blue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: "1.8vw", height: "1.8vw" }}>
                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
               </svg>
             </div>
             <div
               style={{
                 fontSize: "0.8vw",
-                color: "#FF3B00",
-                fontWeight: 700,
+                color: blue,
+                fontWeight: 600,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 marginBottom: "1vh",
@@ -165,8 +185,8 @@ export default function Slide4ComoFunciona() {
             <h3
               style={{
                 fontSize: "1.6vw",
-                fontWeight: 800,
-                color: "#F8F5F1",
+                fontWeight: 400,
+                color: "#1c1c1e",
                 margin: 0,
                 marginBottom: "1.5vh",
                 letterSpacing: "-0.02em",
@@ -174,7 +194,7 @@ export default function Slide4ComoFunciona() {
             >
               Deep Scan de Código
             </h3>
-            <p style={{ fontSize: "1.1vw", color: "#9A9A9A", lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: "1.1vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
               Conecte seu repositório GitHub. Gemini analisa o código-fonte em busca de vulnerabilidades OWASP, chaves hardcoded e lógica de autenticação fraca.
             </p>
           </div>
@@ -182,11 +202,15 @@ export default function Slide4ComoFunciona() {
           <div
             style={{
               flex: 1,
-              background: "#222020",
-              border: "1px solid #2E2B2B",
+              background: "rgba(255,255,255,0.85)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: `1px solid rgba(0,0,0,0.08)`,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
               padding: "3.5vh 2.5vw",
               position: "relative",
               overflow: "hidden",
+              borderRadius: "1vw",
             }}
           >
             <div
@@ -196,22 +220,24 @@ export default function Slide4ComoFunciona() {
                 left: 0,
                 right: 0,
                 height: "3px",
-                background: "#FF3B00",
+                background: blue,
+                borderRadius: "1vw 1vw 0 0",
               }}
             />
             <div
               style={{
                 width: "3.5vw",
                 height: "3.5vw",
-                background: "rgba(255,59,0,0.15)",
-                border: "1px solid rgba(255,59,0,0.4)",
+                background: blueLight,
+                border: `1px solid ${blueBorder}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: "2.5vh",
+                borderRadius: "0.8vw",
               }}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FF3B00" strokeWidth="2" strokeLinecap="square" style={{ width: "1.8vw", height: "1.8vw" }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke={blue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: "1.8vw", height: "1.8vw" }}>
                 <line x1="12" y1="1" x2="12" y2="23" />
                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
               </svg>
@@ -219,8 +245,8 @@ export default function Slide4ComoFunciona() {
             <div
               style={{
                 fontSize: "0.8vw",
-                color: "#FF3B00",
-                fontWeight: 700,
+                color: blue,
+                fontWeight: 600,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 marginBottom: "1vh",
@@ -231,8 +257,8 @@ export default function Slide4ComoFunciona() {
             <h3
               style={{
                 fontSize: "1.6vw",
-                fontWeight: 800,
-                color: "#F8F5F1",
+                fontWeight: 400,
+                color: "#1c1c1e",
                 margin: 0,
                 marginBottom: "1.5vh",
                 letterSpacing: "-0.02em",
@@ -240,7 +266,7 @@ export default function Slide4ComoFunciona() {
             >
               Estimativa de Custo Dev
             </h3>
-            <p style={{ fontSize: "1.1vw", color: "#9A9A9A", lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: "1.1vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
               Calcula o custo estimado para corrigir cada vulnerabilidade por um desenvolvedor humano — justificando o investimento em segurança com dados reais.
             </p>
           </div>

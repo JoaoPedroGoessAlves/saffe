@@ -1,20 +1,27 @@
 export default function Slide7Encerramento() {
+  const blue = "hsl(212, 100%, 44%)";
+  const blueLight = "rgba(0, 112, 224, 0.08)";
+  const blueBorder = "rgba(0, 112, 224, 0.20)";
+
   return (
-    <div className="relative w-screen h-screen overflow-hidden" style={{ background: "#1A1919" }}>
+    <div
+      className="relative w-screen h-screen overflow-hidden"
+      style={{ background: "#f5f5f7", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+    >
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(255,59,0,0.15) 0%, transparent 65%)",
+            "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,112,224,0.07) 0%, transparent 65%)",
         }}
       />
       <div
         className="absolute bottom-0 left-0 w-full"
-        style={{ height: "4px", background: "#FF3B00" }}
+        style={{ height: "4px", background: blue }}
       />
       <div
         className="absolute top-0 right-0 h-full"
-        style={{ width: "4px", background: "#FF3B00" }}
+        style={{ width: "4px", background: blue }}
       />
 
       <div
@@ -26,18 +33,20 @@ export default function Slide7Encerramento() {
             style={{
               width: "4.5vw",
               height: "4.5vw",
-              background: "#FF3B00",
+              background: blue,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              borderRadius: "1vw",
             }}
           >
             <svg
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#F8F5F1"
+              stroke="#ffffff"
               strokeWidth="2.2"
-              strokeLinecap="square"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               style={{ width: "2.6vw", height: "2.6vw" }}
             >
               <path d="M12 2L4 6v6c0 5.25 3.5 9.74 8 11 4.5-1.26 8-5.75 8-11V6L12 2z" />
@@ -46,9 +55,9 @@ export default function Slide7Encerramento() {
           <span
             style={{
               fontSize: "3.5vw",
-              fontWeight: 900,
-              letterSpacing: "-0.04em",
-              color: "#F8F5F1",
+              fontWeight: 200,
+              letterSpacing: "-0.05em",
+              color: "#1c1c1e",
             }}
           >
             Saffe
@@ -58,10 +67,10 @@ export default function Slide7Encerramento() {
         <h1
           style={{
             fontSize: "6vw",
-            fontWeight: 900,
-            letterSpacing: "-0.05em",
+            fontWeight: 200,
+            letterSpacing: "-0.06em",
             lineHeight: 1.0,
-            color: "#F8F5F1",
+            color: "#1c1c1e",
             margin: 0,
           }}
         >
@@ -70,10 +79,10 @@ export default function Slide7Encerramento() {
         <h1
           style={{
             fontSize: "6vw",
-            fontWeight: 900,
-            letterSpacing: "-0.05em",
+            fontWeight: 200,
+            letterSpacing: "-0.06em",
             lineHeight: 1.0,
-            color: "#FF3B00",
+            color: blue,
             margin: 0,
           }}
         >
@@ -84,7 +93,7 @@ export default function Slide7Encerramento() {
           style={{
             width: "8vw",
             height: "2px",
-            background: "#FF3B00",
+            background: blue,
             margin: "4vh auto",
           }}
         />
@@ -92,9 +101,10 @@ export default function Slide7Encerramento() {
         <p
           style={{
             fontSize: "1.3vw",
-            color: "#9A9A9A",
+            color: "#636366",
             lineHeight: 1.6,
             maxWidth: "40vw",
+            fontWeight: 300,
           }}
         >
           Segurança automatizada para o ecossistema de apps gerados por IA. Construído no Hackathon Replit + Resend · 42 São Paulo.
@@ -105,28 +115,28 @@ export default function Slide7Encerramento() {
           style={{ gap: "4vw", marginTop: "5vh" }}
         >
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "0.9vw", color: "#9A9A9A", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh" }}>
+            <div style={{ fontSize: "0.9vw", color: "#8e8e93", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
               Equipe
             </div>
-            <div style={{ fontSize: "1.3vw", color: "#F8F5F1", fontWeight: 700 }}>
+            <div style={{ fontSize: "1.3vw", color: "#1c1c1e", fontWeight: 400 }}>
               Saffe Team
             </div>
           </div>
-          <div style={{ width: "1px", height: "4vh", background: "#2E2B2B" }} />
+          <div style={{ width: "1px", height: "4vh", background: "rgba(0,0,0,0.12)" }} />
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "0.9vw", color: "#9A9A9A", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh" }}>
+            <div style={{ fontSize: "0.9vw", color: "#8e8e93", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
               Evento
             </div>
-            <div style={{ fontSize: "1.3vw", color: "#F8F5F1", fontWeight: 700 }}>
+            <div style={{ fontSize: "1.3vw", color: "#1c1c1e", fontWeight: 400 }}>
               Replit + Resend Hackathon
             </div>
           </div>
-          <div style={{ width: "1px", height: "4vh", background: "#2E2B2B" }} />
+          <div style={{ width: "1px", height: "4vh", background: "rgba(0,0,0,0.12)" }} />
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "0.9vw", color: "#9A9A9A", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh" }}>
+            <div style={{ fontSize: "0.9vw", color: "#8e8e93", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5vh", fontWeight: 400 }}>
               Data
             </div>
-            <div style={{ fontSize: "1.3vw", color: "#F8F5F1", fontWeight: 700 }}>
+            <div style={{ fontSize: "1.3vw", color: "#1c1c1e", fontWeight: 400 }}>
               21 de Março, 2026
             </div>
           </div>

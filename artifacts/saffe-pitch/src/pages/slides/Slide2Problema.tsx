@@ -1,16 +1,22 @@
 export default function Slide2Problema() {
+  const blue = "hsl(212, 100%, 44%)";
+  const blueBorder = "rgba(0, 112, 224, 0.20)";
+
   return (
-    <div className="relative w-screen h-screen overflow-hidden" style={{ background: "#1A1919" }}>
+    <div
+      className="relative w-screen h-screen overflow-hidden"
+      style={{ background: "#f5f5f7", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+    >
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 80% 50%, rgba(255,59,0,0.10) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 50% at 80% 50%, rgba(0,112,224,0.06) 0%, transparent 70%)",
         }}
       />
       <div
         className="absolute top-0 left-0 w-full"
-        style={{ height: "4px", background: "#FF3B00" }}
+        style={{ height: "4px", background: blue }}
       />
 
       <div className="relative flex h-full" style={{ paddingLeft: "8vw", paddingRight: "8vw", paddingTop: "8vh", paddingBottom: "8vh" }}>
@@ -19,10 +25,10 @@ export default function Slide2Problema() {
             <div
               style={{
                 fontSize: "1vw",
-                color: "#FF3B00",
+                color: blue,
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                fontWeight: 700,
+                fontWeight: 500,
                 marginBottom: "1.5vh",
               }}
             >
@@ -31,9 +37,9 @@ export default function Slide2Problema() {
             <h2
               style={{
                 fontSize: "3.5vw",
-                fontWeight: 800,
-                color: "#F8F5F1",
-                letterSpacing: "-0.03em",
+                fontWeight: 200,
+                color: "#1c1c1e",
+                letterSpacing: "-0.04em",
                 lineHeight: 1.1,
                 margin: 0,
                 maxWidth: "55vw",
@@ -48,10 +54,10 @@ export default function Slide2Problema() {
               <div
                 style={{
                   fontSize: "16vw",
-                  fontWeight: 900,
+                  fontWeight: 200,
                   letterSpacing: "-0.06em",
                   lineHeight: 1,
-                  color: "#FF3B00",
+                  color: blue,
                 }}
               >
                 70%
@@ -59,8 +65,8 @@ export default function Slide2Problema() {
               <div
                 style={{
                   fontSize: "1.4vw",
-                  color: "#F8F5F1",
-                  fontWeight: 600,
+                  color: "#1c1c1e",
+                  fontWeight: 400,
                   maxWidth: "36vw",
                   lineHeight: 1.4,
                   marginTop: "1vh",
@@ -73,7 +79,7 @@ export default function Slide2Problema() {
             <div
               style={{
                 flex: 1,
-                borderLeft: "1px solid #2E2B2B",
+                borderLeft: `1px solid ${blueBorder}`,
                 paddingLeft: "4vw",
               }}
             >
@@ -83,11 +89,11 @@ export default function Slide2Problema() {
                     style={{
                       width: "2.5vw",
                       height: "2px",
-                      background: "#FF3B00",
+                      background: blue,
                       marginBottom: "1.5vh",
                     }}
                   />
-                  <p style={{ fontSize: "1.3vw", color: "#9A9A9A", lineHeight: 1.5, margin: 0 }}>
+                  <p style={{ fontSize: "1.3vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
                     Qualquer pessoa pode criar um app hoje. O Replit Agent, Cursor, Lovable — ferramentas poderosas, mas que não foram feitas para checar segurança.
                   </p>
                 </div>
@@ -96,11 +102,11 @@ export default function Slide2Problema() {
                     style={{
                       width: "2.5vw",
                       height: "2px",
-                      background: "#FF3B00",
+                      background: blue,
                       marginBottom: "1.5vh",
                     }}
                   />
-                  <p style={{ fontSize: "1.3vw", color: "#9A9A9A", lineHeight: 1.5, margin: 0 }}>
+                  <p style={{ fontSize: "1.3vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
                     APIs expostas, chaves vazadas, CORS aberto: vulnerabilidades reais que chegam a produção porque ninguém fez a pergunta certa.
                   </p>
                 </div>
@@ -109,11 +115,11 @@ export default function Slide2Problema() {
                     style={{
                       width: "2.5vw",
                       height: "2px",
-                      background: "#FF3B00",
+                      background: blue,
                       marginBottom: "1.5vh",
                     }}
                   />
-                  <p style={{ fontSize: "1.3vw", color: "#9A9A9A", lineHeight: 1.5, margin: 0 }}>
+                  <p style={{ fontSize: "1.3vw", color: "#636366", lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
                     O desenvolvedor virou usuário. Mas o risco de segurança continuou sendo de desenvolvedor.
                   </p>
                 </div>
@@ -124,8 +130,9 @@ export default function Slide2Problema() {
           <div
             style={{
               fontSize: "1vw",
-              color: "#9A9A9A",
+              color: "#8e8e93",
               letterSpacing: "0.05em",
+              fontWeight: 300,
             }}
           >
             Fonte: OWASP Top 10 · Snyk State of Security 2024
