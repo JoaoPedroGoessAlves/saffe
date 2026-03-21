@@ -1,0 +1,18 @@
+packages:
+  "framer-motion": "For premium page transitions and interactive component animations"
+  "date-fns": "For elegant date formatting in the dashboard and reports"
+  "@workspace/api-client-react": "Generated API hooks (workspace dependency)"
+  "@workspace/replit-auth-web": "Replit authentication hook (workspace dependency)"
+
+images:
+  - path: "artifacts/saffe/public/images/hero-mesh.png"
+    description: "A dark, moody abstract gradient mesh background with deep indigo, electric blue, and subtle teal light leaks. High tech, cybersecurity aesthetic, clean and minimal."
+    aspect_ratio: "16:9"
+  - path: "artifacts/saffe/public/images/auth-bg.png"
+    description: "Abstract subtle geometric shapes floating on a clean white background with soft blue shadows, representing security and structure."
+    aspect_ratio: "16:9"
+
+notes:
+  - "The app relies on @workspace/replit-auth-web for the useAuth hook."
+  - "API hooks are imported directly from @workspace/api-client-react."
+  - "The API base URL is /api and is handled by the proxy."

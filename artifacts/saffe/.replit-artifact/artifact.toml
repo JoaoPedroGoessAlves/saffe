@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Saffe"
+version = "1.0.0"
+id = "artifacts/saffe"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24138
+
+[services.development]
+run = "pnpm --filter @workspace/saffe run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/saffe", "run", "build" ]
+publicDir = "artifacts/saffe/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24138"
+BASE_PATH = "/"
