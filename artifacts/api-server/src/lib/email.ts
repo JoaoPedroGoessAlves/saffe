@@ -235,19 +235,24 @@ export async function sendScanReportEmail(
     const html = buildEmailHtml(scan, results);
     const riskLabel = RISK_LABELS[scan.riskLevel || "low"] || "Baixo";
 
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+
     const { error } = await resend.emails.send({
-      from: "Saffe <noreply@saffe.app>",
+      from: `Saffe <${fromEmail}>`,
       to,
       subject: `Relatório de Segurança Saffe: Risco ${riskLabel} — ${scan.domain}`,
       html,
     });
 
     if (error) {
+      console.error("Resend error:", { name: (error as { name?: string }).name, message: error.message, statusCode: (error as { statusCode?: number }).statusCode });
       return { success: false, error: error.message };
     }
 
     return { success: true };
   } catch (err) {
+    const e = err as Error;
+    console.error("Resend send exception:", { name: e.name, message: e.message, stack: e.stack });
     return { success: false, error: String(err) };
   }
 }

@@ -27,3 +27,8 @@ timeoutMs = 20000
 
 [nix]
 packages = ["scc"]
+
+[userenv]
+
+[userenv.shared]
+RESEND_FROM_EMAIL = "onboarding@resend.dev"

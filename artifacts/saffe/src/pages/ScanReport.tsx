@@ -335,6 +335,9 @@ function EmailReportDialog({ scanId }: Readonly<{ scanId: string }>) {
             {t("scanReport.shareDesc")}
           </DialogDescription>
         </DialogHeader>
+        <p className="text-xs text-muted-foreground bg-muted/50 rounded-md px-3 py-2 mt-1">
+          {t("scanReport.emailNote")}
+        </p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
             <FormField
