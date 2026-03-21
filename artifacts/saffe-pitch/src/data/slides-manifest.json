@@ -1,0 +1,58 @@
+[
+  {
+    "id": "a1b2c3d4-0001-4000-8000-000000000001",
+    "position": 1,
+    "filepath": "src/pages/slides/Slide1Capa.tsx",
+    "title": "Capa",
+    "description": "Slide de abertura com logo Saffe, tagline e badge do evento.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0002-4000-8000-000000000002",
+    "position": 2,
+    "filepath": "src/pages/slides/Slide2Problema.tsx",
+    "title": "O Problema",
+    "description": "Big stat: 70% dos apps gerados por IA têm brechas críticas de segurança.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0003-4000-8000-000000000003",
+    "position": 3,
+    "filepath": "src/pages/slides/Slide3Solucao.tsx",
+    "title": "A Solução",
+    "description": "O que é o Saffe em uma frase, com visual do relatório.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0004-4000-8000-000000000004",
+    "position": 4,
+    "filepath": "src/pages/slides/Slide4ComoFunciona.tsx",
+    "title": "Como Funciona",
+    "description": "Três colunas: Scan de URL, Deep Scan (GitHub + Gemini), Estimativa de Custo.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0005-4000-8000-000000000005",
+    "position": 5,
+    "filepath": "src/pages/slides/Slide5Demo.tsx",
+    "title": "Demo",
+    "description": "Slide full-bleed para demonstração ao vivo do produto.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0006-4000-8000-000000000006",
+    "position": 6,
+    "filepath": "src/pages/slides/Slide6PorQueAgora.tsx",
+    "title": "Por Que Agora",
+    "description": "Contexto de mercado: crescimento de apps por IA, OWASP, gap que o Saffe preenche.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0007-4000-8000-000000000007",
+    "position": 7,
+    "filepath": "src/pages/slides/Slide7Encerramento.tsx",
+    "title": "Encerramento",
+    "description": "Lockup final: Ship fast. Stay Saffe. com branding e info do evento.",
+    "speakerNotes": ""
+  }
+]
