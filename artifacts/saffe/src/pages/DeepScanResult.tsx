@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import {
   Github, ArrowLeft, Loader2, AlertTriangle,
-  ShieldAlert, ShieldCheck, Code2, ChevronDown, ChevronUp,
+  ShieldAlert, ShieldCheck, Code2, ChevronDown, ChevronUp, Copy, Check,
 } from "lucide-react";
 import { useState } from "react";
 import { useGetJulesScan, type JulesFinding } from "@/hooks/use-jules";
@@ -290,9 +290,19 @@ function FindingCard({
   severityLabels: Record<string, string>;
 }) {
   const [expanded, setExpanded] = useState(index === 0);
+  const [copied, setCopied] = useState(false);
   const { t } = useLanguage();
   const borderColor = SEVERITY_BORDER[finding.severity] ?? "border-l-gray-400";
   const badgeClass = SEVERITY_COLORS[finding.severity] ?? "";
+
+  function handleCopy(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!finding.vibePrompt) return;
+    navigator.clipboard.writeText(finding.vibePrompt).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   return (
     <motion.div
@@ -347,6 +357,28 @@ function FindingCard({
                     </p>
                     <p className="text-sm text-green-800 dark:text-green-300 leading-relaxed">
                       {finding.fixSuggestion}
+                    </p>
+                  </div>
+                )}
+                {finding.vibePrompt && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/40 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-blue-700 dark:text-blue-400">
+                        🤖 {t("deepResult.vibePromptLabel")}
+                      </p>
+                      <button
+                        onClick={handleCopy}
+                        className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                      >
+                        {copied ? (
+                          <><Check className="w-3 h-3" /> {t("deepResult.copied")}</>
+                        ) : (
+                          <><Copy className="w-3 h-3" /> {t("deepResult.copyPrompt")}</>
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-xs text-blue-800 dark:text-blue-300 font-mono bg-white dark:bg-blue-950/40 rounded p-2 leading-relaxed whitespace-pre-wrap">
+                      {finding.vibePrompt}
                     </p>
                   </div>
                 )}

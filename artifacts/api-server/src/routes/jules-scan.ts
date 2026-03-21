@@ -91,6 +91,7 @@ interface ScanResult {
     file?: string;
     line?: number;
     fixSuggestion: string;
+    vibePrompt?: string;
   }>;
 }
 
@@ -203,6 +204,7 @@ For each finding, provide:
 - Description of the vulnerability and why it is dangerous
 - The file path and line number where applicable
 - A concrete fix suggestion
+- A vibePrompt: a ready-to-use prompt in Brazilian Portuguese that a non-technical founder can paste directly into an AI coding tool (Lovable, Bolt, v0, or Cursor) to fix this specific vulnerability. The prompt must be specific to the actual file and code found, mention the file name, and tell the AI tool exactly what to change. It should be written as a direct instruction starting with an action verb, for example: "Corrija a vulnerabilidade de SQL Injection no arquivo src/routes/users.js: substitua a concatenação de string na query SQL por prepared statements com parâmetros parametrizados."
 
 End your analysis with EXACTLY this JSON block (no extra text after):
 
@@ -221,7 +223,8 @@ End your analysis with EXACTLY this JSON block (no extra text after):
       "description": "A live Stripe secret key is hardcoded in the config file and will be exposed in the public repository.",
       "file": "src/config.js",
       "line": 12,
-      "fixSuggestion": "Remove the key from source code and load it from an environment variable: process.env.STRIPE_SECRET_KEY"
+      "fixSuggestion": "Remove the key from source code and load it from an environment variable: process.env.STRIPE_SECRET_KEY",
+      "vibePrompt": "Corrija o vazamento de credencial no arquivo src/config.js: remova a chave secreta do Stripe que está hardcoded na linha 12 e substitua por process.env.STRIPE_SECRET_KEY. Certifique-se de que a variável de ambiente está documentada no arquivo .env.example sem o valor real."
     }
   ]
 }

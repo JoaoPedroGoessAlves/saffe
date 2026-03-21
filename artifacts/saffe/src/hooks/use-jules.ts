@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 export interface JulesFinding {
+  vibePrompt?: string;
   severity: "critical" | "high" | "medium" | "low";
   title: string;
   description: string;
