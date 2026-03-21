@@ -1,24 +1,16 @@
 import { Router, type IRouter, type Request, type Response } from "express";
-import { db, julesAnalysesTable, type JulesAnalysis } from "@workspace/db";
+import { db, julesAnalysesTable } from "@workspace/db";
 import { eq, and, desc } from "drizzle-orm";
+import { ai } from "@workspace/integrations-gemini-ai";
 
 const router: IRouter = Router();
 
-const JULES_BASE = "https://jules.googleapis.com/v1alpha";
-
-function getJulesHeaders(): Record<string, string> {
-  const key = process.env.JULES_API_KEY;
-  if (!key) throw new Error("JULES_API_KEY not configured");
-  return {
-    "X-Goog-Api-Key": key,
-    "Content-Type": "application/json",
-  };
-}
+const GITHUB_API_BASE = "https://api.github.com";
 
 function parseRepoUrl(url: string): { owner: string; name: string } | null {
   try {
     const parsed = new URL(url);
-    if (!parsed.hostname.includes("github.com")) return null;
+    if (parsed.hostname !== "github.com" && parsed.hostname !== "www.github.com") return null;
     const parts = parsed.pathname.replace(/^\//, "").split("/");
     const owner = parts[0];
     const name = parts[1]?.replace(".git", "");
@@ -29,8 +21,169 @@ function parseRepoUrl(url: string): { owner: string; name: string } | null {
   }
 }
 
-function buildSecurityPrompt(owner: string, name: string): string {
-  return `You are an expert security code reviewer. Analyze the GitHub repository https://github.com/${owner}/${name} for security vulnerabilities.
+const SECURITY_RELEVANT_PATTERNS = [
+  /\.env/i,
+  /config/i,
+  /auth/i,
+  /secret/i,
+  /credential/i,
+  /password/i,
+  /token/i,
+  /key/i,
+  /dockerfile/i,
+  /docker-compose/i,
+  /route/i,
+  /middleware/i,
+  /server/i,
+  /app\.(js|ts|py|rb|go)/i,
+  /index\.(js|ts|py|rb|go)/i,
+  /main\.(js|ts|py|rb|go)/i,
+  /security/i,
+  /permission/i,
+  /access/i,
+  /login/i,
+  /signup/i,
+  /register/i,
+  /\.yml/i,
+  /\.yaml/i,
+  /requirements\.txt/i,
+  /package\.json/i,
+  /gemfile/i,
+];
+
+function isSecurityRelevant(filePath: string): boolean {
+  return SECURITY_RELEVANT_PATTERNS.some((pat) => pat.test(filePath));
+}
+
+interface GitHubRepoInfo {
+  default_branch: string;
+}
+
+interface GitHubTreeItem {
+  path: string;
+  type: "blob" | "tree";
+  size?: number;
+  url?: string;
+  sha?: string;
+}
+
+interface GitHubTreeResponse {
+  tree: GitHubTreeItem[];
+  truncated?: boolean;
+}
+
+interface GitHubFileContent {
+  content: string;
+  encoding: string;
+}
+
+interface ScanResult {
+  riskLevel: string;
+  totalFindings: number;
+  criticalCount: number;
+  highCount: number;
+  mediumCount: number;
+  lowCount: number;
+  findings: Array<{
+    severity: string;
+    title: string;
+    description: string;
+    file?: string;
+    line?: number;
+    fixSuggestion: string;
+  }>;
+}
+
+async function getDefaultBranch(owner: string, name: string): Promise<string> {
+  const res = await fetch(`${GITHUB_API_BASE}/repos/${owner}/${name}`, {
+    headers: { Accept: "application/vnd.github+json", "User-Agent": "saffe-security-scanner" },
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`GitHub API error ${res.status}: ${body}`);
+  }
+  const data = (await res.json()) as GitHubRepoInfo;
+  return data.default_branch;
+}
+
+async function getRepoFileTree(
+  owner: string,
+  name: string,
+  branch: string
+): Promise<GitHubTreeItem[]> {
+  const res = await fetch(
+    `${GITHUB_API_BASE}/repos/${owner}/${name}/git/trees/${encodeURIComponent(branch)}?recursive=1`,
+    {
+      headers: { Accept: "application/vnd.github+json", "User-Agent": "saffe-security-scanner" },
+    }
+  );
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`GitHub API error ${res.status}: ${body}`);
+  }
+  const data = (await res.json()) as GitHubTreeResponse;
+  return data.tree || [];
+}
+
+async function fetchFileContent(
+  owner: string,
+  name: string,
+  filePath: string,
+  branch: string
+): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `${GITHUB_API_BASE}/repos/${owner}/${name}/contents/${filePath}?ref=${encodeURIComponent(branch)}`,
+      {
+        headers: { Accept: "application/vnd.github+json", "User-Agent": "saffe-security-scanner" },
+      }
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as GitHubFileContent;
+    if (data.encoding === "base64") {
+      return Buffer.from(data.content.replace(/\n/g, ""), "base64").toString("utf8");
+    }
+    return data.content;
+  } catch {
+    return null;
+  }
+}
+
+async function collectRepoCode(
+  owner: string,
+  name: string,
+  branch: string
+): Promise<string> {
+  const tree = await getRepoFileTree(owner, name, branch);
+  const blobs = tree.filter((item) => item.type === "blob" && item.path);
+
+  const relevant = blobs
+    .filter((item) => isSecurityRelevant(item.path))
+    .sort((a, b) => (a.size ?? 0) - (b.size ?? 0))
+    .slice(0, 60);
+
+  const MAX_TOTAL_BYTES = 150 * 1024;
+  let totalBytes = 0;
+  const codeBlocks: string[] = [];
+
+  for (const item of relevant) {
+    if (totalBytes >= MAX_TOTAL_BYTES) break;
+    const content = await fetchFileContent(owner, name, item.path, branch);
+    if (!content) continue;
+    const chunk = content.slice(0, 20000);
+    const block = `\n\n--- FILE: ${item.path} ---\n${chunk}`;
+    totalBytes += block.length;
+    codeBlocks.push(block);
+  }
+
+  return codeBlocks.join("") || "(no security-relevant files found in this repository)";
+}
+
+function buildSecurityPrompt(owner: string, name: string, code: string): string {
+  return `You are an expert security code reviewer. Analyze the following code from the GitHub repository https://github.com/${owner}/${name} for security vulnerabilities.
+
+Repository code:
+${code}
 
 Check for:
 1. Hardcoded secrets, API keys, tokens, and credentials in source code
@@ -75,95 +228,20 @@ End your analysis with EXACTLY this JSON block (no extra text after):
 \`\`\``;
 }
 
-interface JulesActivity {
-  name: string;
-  createTime: string;
-  planGenerated?: { plan: string };
-  progressUpdated?: { message: string };
-  sessionCompleted?: { message: string };
-}
-
-interface JulesResult {
-  riskLevel: string;
-  totalFindings: number;
-  criticalCount: number;
-  highCount: number;
-  mediumCount: number;
-  lowCount: number;
-  findings: Array<{
-    severity: string;
-    title: string;
-    description: string;
-    file?: string;
-    line?: number;
-    fixSuggestion: string;
-  }>;
-}
-
-function extractJsonFromMessage(message: string): JulesResult | null {
+function extractJsonFromMessage(message: string): ScanResult | null {
   try {
     const match = message.match(/```json\s*([\s\S]*?)\s*```/);
     if (match) {
-      return JSON.parse(match[1]) as JulesResult;
+      return JSON.parse(match[1]) as ScanResult;
     }
     const jsonMatch = message.match(/\{[\s\S]*"findings"[\s\S]*\}/);
     if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]) as JulesResult;
+      return JSON.parse(jsonMatch[0]) as ScanResult;
     }
   } catch {
     // ignore parse errors
   }
   return null;
-}
-
-async function pollAndUpdateJulesStatus(analysis: JulesAnalysis): Promise<void> {
-  if (!analysis.julesSessionId) return;
-
-  try {
-    const sessionId = analysis.julesSessionId.includes("/")
-      ? analysis.julesSessionId.split("/").pop()!
-      : analysis.julesSessionId;
-
-    const activitiesRes = await fetch(
-      `${JULES_BASE}/sessions/${sessionId}/activities`,
-      { headers: getJulesHeaders() }
-    );
-
-    if (!activitiesRes.ok) return;
-
-    const data = (await activitiesRes.json()) as { activities?: JulesActivity[] };
-    const activities: JulesActivity[] = data.activities || [];
-
-    const lastProgress = activities
-      .filter((a) => a.progressUpdated)
-      .at(-1);
-
-    const completed = activities.find((a) => a.sessionCompleted);
-
-    if (completed) {
-      const message = completed.sessionCompleted?.message || "";
-      const result = extractJsonFromMessage(message);
-
-      await db
-        .update(julesAnalysesTable)
-        .set({
-          status: "completed",
-          result: result ?? { rawMessage: message.slice(0, 5000) },
-          completedAt: new Date(),
-        })
-        .where(eq(julesAnalysesTable.id, analysis.id));
-      return;
-    }
-
-    if (lastProgress?.progressUpdated?.message) {
-      await db
-        .update(julesAnalysesTable)
-        .set({ progressMessage: lastProgress.progressUpdated.message.slice(0, 500) })
-        .where(eq(julesAnalysesTable.id, analysis.id));
-    }
-  } catch {
-    // polling errors are non-fatal
-  }
 }
 
 function isValidUrl(value: unknown): value is string {
@@ -173,6 +251,65 @@ function isValidUrl(value: unknown): value is string {
     return true;
   } catch {
     return false;
+  }
+}
+
+async function runDeepScan(analysisId: string, owner: string, name: string): Promise<void> {
+  try {
+    await db
+      .update(julesAnalysesTable)
+      .set({ status: "running", progressMessage: "Fetching repository info..." })
+      .where(eq(julesAnalysesTable.id, analysisId));
+
+    const defaultBranch = await getDefaultBranch(owner, name);
+
+    await db
+      .update(julesAnalysesTable)
+      .set({ progressMessage: `Collecting source files from branch '${defaultBranch}'...` })
+      .where(eq(julesAnalysesTable.id, analysisId));
+
+    const code = await collectRepoCode(owner, name, defaultBranch);
+
+    await db
+      .update(julesAnalysesTable)
+      .set({ progressMessage: "Running AI security analysis..." })
+      .where(eq(julesAnalysesTable.id, analysisId));
+
+    const prompt = buildSecurityPrompt(owner, name, code);
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      config: { maxOutputTokens: 8192 },
+    });
+
+    const message = response.text ?? "";
+    if (!message) {
+      throw new Error("Gemini returned an empty response");
+    }
+
+    const result = extractJsonFromMessage(message);
+
+    await db
+      .update(julesAnalysesTable)
+      .set({
+        status: "completed",
+        result: result ?? { rawMessage: message.slice(0, 5000) },
+        completedAt: new Date(),
+        progressMessage: null,
+      })
+      .where(eq(julesAnalysesTable.id, analysisId));
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error ? err.message : String(err);
+    await db
+      .update(julesAnalysesTable)
+      .set({
+        status: "failed",
+        errorMessage: errorMessage.slice(0, 1000),
+        progressMessage: null,
+      })
+      .where(eq(julesAnalysesTable.id, analysisId));
   }
 }
 
@@ -206,49 +343,8 @@ router.post("/jules-scan", async (req: Request, res: Response) => {
     })
     .returning();
 
-  setImmediate(async () => {
-    try {
-      const prompt = buildSecurityPrompt(repo.owner, repo.name);
-      const sessionRes = await fetch(`${JULES_BASE}/sessions`, {
-        method: "POST",
-        headers: getJulesHeaders(),
-        body: JSON.stringify({
-          title: `Security scan: ${repo.owner}/${repo.name}`,
-          prompt,
-          sourceContext: {
-            source: `sources/github-${repo.owner}-${repo.name}`,
-            githubRepoContext: {
-              startingBranch: "main",
-            },
-          },
-        }),
-      });
-
-      if (!sessionRes.ok) {
-        const errBody = await sessionRes.text();
-        await db
-          .update(julesAnalysesTable)
-          .set({
-            status: "failed",
-            errorMessage: `Jules API error ${sessionRes.status}: ${errBody}`,
-          })
-          .where(eq(julesAnalysesTable.id, analysis.id));
-        return;
-      }
-
-      const session = (await sessionRes.json()) as { id?: string; name?: string };
-      const sessionId = session.id || session.name || "";
-
-      await db
-        .update(julesAnalysesTable)
-        .set({ status: "running", julesSessionId: sessionId })
-        .where(eq(julesAnalysesTable.id, analysis.id));
-    } catch (err) {
-      await db
-        .update(julesAnalysesTable)
-        .set({ status: "failed", errorMessage: String(err) })
-        .where(eq(julesAnalysesTable.id, analysis.id));
-    }
+  setImmediate(() => {
+    void runDeepScan(analysis.id, repo.owner, repo.name);
   });
 
   res.status(201).json({ id: analysis.id, status: "pending" });
@@ -288,16 +384,6 @@ router.get("/jules-scan/:id", async (req: Request, res: Response) => {
 
   if (!analysis) {
     res.status(404).json({ error: "Análise não encontrada" });
-    return;
-  }
-
-  if (analysis.status === "running" && analysis.julesSessionId) {
-    await pollAndUpdateJulesStatus(analysis);
-    const [updated] = await db
-      .select()
-      .from(julesAnalysesTable)
-      .where(eq(julesAnalysesTable.id, analysis.id));
-    res.json(updated);
     return;
   }
 
