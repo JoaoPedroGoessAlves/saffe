@@ -98,7 +98,7 @@ const ptTranslations: Record<string, string> = {
   "dashboard.costSubtitle": "Entenda quanto custaria reconstruir seu app.",
   "dashboard.newCostBtn": "Nova Estimativa de Custo",
   "dashboard.deepTitle": "Deep Code Scans",
-  "dashboard.deepSubtitle": "Análise de segurança profunda do código-fonte via Jules.",
+  "dashboard.deepSubtitle": "Análise de segurança profunda do código-fonte via Gemini AI.",
   "dashboard.newDeepBtn": "Nova Análise de Código",
 
   // ScanList empty
@@ -121,7 +121,7 @@ const ptTranslations: Record<string, string> = {
 
   // JulesScanList empty/error
   "julesList.empty.title": "Nenhuma análise profunda ainda",
-  "julesList.empty.desc": "Conecte um repositório GitHub e deixe o Jules identificar vulnerabilidades no seu código-fonte.",
+  "julesList.empty.desc": "Conecte um repositório GitHub e deixe nossa IA identificar vulnerabilidades no seu código-fonte.",
   "julesList.empty.cta": "Iniciar Deep Scan",
   "julesList.error.desc": "Não foi possível carregar as análises.",
   "julesList.viewResult": "Ver Resultado",
@@ -249,13 +249,13 @@ const ptTranslations: Record<string, string> = {
 
   // DeepScan
   "deepScan.title": "Deep Code Scan",
-  "deepScan.subtitle": "O Jules analisa seu repositório GitHub e identifica vulnerabilidades diretamente no código-fonte — muito além do que um scan de URL consegue detectar.",
+  "deepScan.subtitle": "Nossa IA analisa seu repositório GitHub e identifica vulnerabilidades diretamente no código-fonte — muito além do que um scan de URL consegue detectar.",
   "deepScan.repoLabel": "URL do Repositório GitHub",
   "deepScan.repoPlaceholder": "https://github.com/seu-usuario/seu-repositorio",
   "deepScan.publicOnly": "Apenas repositórios públicos são suportados no momento.",
   "deepScan.initiating": "Iniciando análise...",
-  "deepScan.analyzeBtn": "Analisar com Jules",
-  "deepScan.footerNote": "A análise do Jules pode levar alguns minutos dependendo do tamanho do repositório.",
+  "deepScan.analyzeBtn": "Analisar Repositório",
+  "deepScan.footerNote": "A análise pode levar alguns minutos dependendo do tamanho do repositório.",
   "deepScan.check1": "Segredos e credenciais expostos",
   "deepScan.check2": "Injeção de SQL e XSS",
   "deepScan.check3": "Autenticação e controle de acesso",
@@ -266,7 +266,7 @@ const ptTranslations: Record<string, string> = {
   "deepResult.notFound": "Análise não encontrada.",
   "deepResult.errorTitle": "Erro na análise",
   "deepResult.retryBtn": "Tentar novamente",
-  "deepResult.pendingTitle": "Jules está analisando o código",
+  "deepResult.pendingTitle": "IA analisando o código",
   "deepResult.pendingNote": "Isso pode levar alguns minutos. Esta página atualiza automaticamente.",
   "deepResult.securityReport": "Relatório de Segurança",
   "deepResult.completedAt": "Concluído em",
@@ -274,7 +274,7 @@ const ptTranslations: Record<string, string> = {
   "deepResult.findings": "vulnerabilidades encontradas",
   "deepResult.findingsOne": "vulnerabilidade encontrada",
   "deepResult.noVulnerabilities": "Nenhuma vulnerabilidade encontrada!",
-  "deepResult.noVulnDesc": "O Jules não identificou problemas de segurança neste repositório.",
+  "deepResult.noVulnDesc": "Nenhum problema de segurança identificado neste repositório.",
   "deepResult.vulnerabilitiesFound": "Vulnerabilidades Encontradas",
   "deepResult.rawOutput": "Resultado da análise",
   "deepResult.noResult": "Sem resultado disponível.",
@@ -349,7 +349,7 @@ const enTranslations: Record<string, string> = {
   "dashboard.costSubtitle": "Understand how much it would cost to rebuild your app.",
   "dashboard.newCostBtn": "New Cost Estimate",
   "dashboard.deepTitle": "Deep Code Scans",
-  "dashboard.deepSubtitle": "Deep source-code security analysis via Jules.",
+  "dashboard.deepSubtitle": "Deep source-code security analysis via Gemini AI.",
   "dashboard.newDeepBtn": "New Code Analysis",
 
   // ScanList empty
@@ -372,7 +372,7 @@ const enTranslations: Record<string, string> = {
 
   // JulesScanList empty/error
   "julesList.empty.title": "No deep scans yet",
-  "julesList.empty.desc": "Connect a GitHub repository and let Jules identify vulnerabilities in your source code.",
+  "julesList.empty.desc": "Connect a GitHub repository and let our AI identify vulnerabilities in your source code.",
   "julesList.empty.cta": "Start Deep Scan",
   "julesList.error.desc": "Could not load analyses.",
   "julesList.viewResult": "View Result",
@@ -497,13 +497,13 @@ const enTranslations: Record<string, string> = {
 
   // DeepScan
   "deepScan.title": "Deep Code Scan",
-  "deepScan.subtitle": "Jules analyzes your GitHub repository and identifies vulnerabilities directly in the source code — far beyond what a URL scan can detect.",
+  "deepScan.subtitle": "Our AI analyzes your GitHub repository and identifies vulnerabilities directly in the source code — far beyond what a URL scan can detect.",
   "deepScan.repoLabel": "GitHub Repository URL",
   "deepScan.repoPlaceholder": "https://github.com/your-user/your-repository",
   "deepScan.publicOnly": "Only public repositories are supported at this time.",
   "deepScan.initiating": "Starting analysis...",
-  "deepScan.analyzeBtn": "Analyze with Jules",
-  "deepScan.footerNote": "Jules analysis can take a few minutes depending on the size of the repository.",
+  "deepScan.analyzeBtn": "Analyze Repository",
+  "deepScan.footerNote": "Analysis can take a few minutes depending on the size of the repository.",
   "deepScan.check1": "Exposed secrets and credentials",
   "deepScan.check2": "SQL injection and XSS",
   "deepScan.check3": "Authentication and access control",
@@ -514,7 +514,7 @@ const enTranslations: Record<string, string> = {
   "deepResult.notFound": "Analysis not found.",
   "deepResult.errorTitle": "Analysis error",
   "deepResult.retryBtn": "Try again",
-  "deepResult.pendingTitle": "Jules is analyzing the code",
+  "deepResult.pendingTitle": "AI is analyzing the code",
   "deepResult.pendingNote": "This may take a few minutes. This page updates automatically.",
   "deepResult.securityReport": "Security Report",
   "deepResult.completedAt": "Completed on",
@@ -522,7 +522,7 @@ const enTranslations: Record<string, string> = {
   "deepResult.findings": "vulnerabilities found",
   "deepResult.findingsOne": "vulnerability found",
   "deepResult.noVulnerabilities": "No vulnerabilities found!",
-  "deepResult.noVulnDesc": "Jules did not identify any security issues in this repository.",
+  "deepResult.noVulnDesc": "No security issues identified in this repository.",
   "deepResult.vulnerabilitiesFound": "Vulnerabilities Found",
   "deepResult.rawOutput": "Analysis result",
   "deepResult.noResult": "No result available.",
