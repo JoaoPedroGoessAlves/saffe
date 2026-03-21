@@ -9,6 +9,8 @@ import NewScan from "@/pages/NewScan";
 import ScanReport from "@/pages/ScanReport";
 import CostEstimator from "@/pages/CostEstimator";
 import CostAnalysisResult from "@/pages/CostAnalysisResult";
+import DeepScan from "@/pages/DeepScan";
+import DeepScanResult from "@/pages/DeepScanResult";
 import NotFound from "@/pages/not-found";
 
 // Configure default fetch options for auth cookies
@@ -30,6 +32,8 @@ function Router() {
       <Route path="/scan/:scanId" component={ScanReport} />
       <Route path="/cost-estimator" component={CostEstimator} />
       <Route path="/cost-analysis/:analysisId" component={CostAnalysisResult} />
+      <Route path="/deep-scan" component={DeepScan} />
+      <Route path="/deep-scan/:id" component={DeepScanResult} />
       <Route component={NotFound} />
     </Switch>
   );

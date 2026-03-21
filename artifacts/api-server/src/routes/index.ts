@@ -5,6 +5,7 @@ import verifyRouter from "./verify";
 import scansRouter from "./scans";
 import githubVerifyRouter from "./github-verify";
 import costAnalysisRouter from "./cost-analysis";
+import julesScanRouter from "./jules-scan";
 
 const router: IRouter = Router();
 
@@ -14,5 +15,6 @@ router.use(verifyRouter);
 router.use(scansRouter);
 router.use(githubVerifyRouter);
 router.use(costAnalysisRouter);
+router.use(julesScanRouter);
 
 export default router;

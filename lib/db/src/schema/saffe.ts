@@ -63,6 +63,21 @@ export const costAnalysesTable = pgTable("cost_analyses", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+export const julesAnalysesTable = pgTable("jules_analyses", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  repoUrl: text("repo_url").notNull(),
+  repoOwner: text("repo_owner").notNull(),
+  repoName: text("repo_name").notNull(),
+  status: varchar("status", { enum: ["pending", "running", "completed", "failed"] }).notNull().default("pending"),
+  julesSessionId: text("jules_session_id"),
+  result: jsonb("result"),
+  progressMessage: text("progress_message"),
+  errorMessage: text("error_message"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+});
+
 export const insertDomainVerificationSchema = createInsertSchema(domainVerificationsTable).omit({ id: true });
 export const insertScanSchema = createInsertSchema(scansTable).omit({ id: true });
 export const insertScanResultSchema = createInsertSchema(scanResultsTable).omit({ id: true });
@@ -79,3 +94,4 @@ export type GithubVerification = typeof githubVerificationsTable.$inferSelect;
 export type InsertGithubVerification = z.infer<typeof insertGithubVerificationSchema>;
 export type CostAnalysis = typeof costAnalysesTable.$inferSelect;
 export type InsertCostAnalysis = z.infer<typeof insertCostAnalysisSchema>;
+export type JulesAnalysis = typeof julesAnalysesTable.$inferSelect;
