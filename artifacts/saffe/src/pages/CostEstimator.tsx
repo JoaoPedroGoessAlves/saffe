@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Copy, Check, Github, ArrowRight, Loader2, DollarSign } from "lucide-react";
+import { Copy, Check, Github, ArrowRight, Loader2 } from "lucide-react";
 
 import { Navbar } from "@/components/layout/Navbar";
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
@@ -19,6 +19,7 @@ import {
   useSaffeCreateCostAnalysis,
 } from "@/hooks/use-cost-estimator";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CostScanAnimation } from "@/components/animations/CostScanAnimation";
 
 type RepoFormData = { repoUrl: string };
 
@@ -287,17 +288,15 @@ function CostEstimatorWizard() {
             key="analyzing"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-20"
+            className="py-4"
           >
-            <div className="relative w-24 h-24 mx-auto mb-8">
-              <div className="absolute inset-0 border-4 border-muted rounded-full"></div>
-              <div className="absolute inset-0 border-4 border-primary rounded-full border-t-transparent animate-spin"></div>
-              <DollarSign className="absolute inset-0 m-auto w-10 h-10 text-primary animate-pulse" />
+            <div className="text-center mb-2">
+              <h2 className="text-2xl font-bold mb-1">{t("costEstimator.analyzingTitle")}</h2>
+              <p className="text-muted-foreground text-sm">
+                {t("costEstimator.analyzingDesc")}
+              </p>
             </div>
-            <h2 className="text-2xl font-bold mb-2">{t("costEstimator.analyzingTitle")}</h2>
-            <p className="text-muted-foreground">
-              {t("costEstimator.analyzingDesc")}
-            </p>
+            <CostScanAnimation />
           </motion.div>
         )}
       </AnimatePresence>
