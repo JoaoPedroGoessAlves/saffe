@@ -166,6 +166,227 @@
   --elevate-2: rgba(255,255,255, .09);
 }
 
+/* ===== Vercel Theme ===== */
+.ui-vercel {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 100%;
+  --card-border: 0 0% 18%;
+
+  --popover: 0 0% 5%;
+  --popover-foreground: 0 0% 100%;
+  --popover-border: 0 0% 18%;
+
+  /* Black button with white text — spec: "botão primário preto com cantos retos" */
+  --primary: 0 0% 8%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 0 0% 10%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 0 0% 10%;
+  --muted-foreground: 0 0% 55%;
+
+  --accent: 214 100% 48%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 0%;
+
+  --info: 214 80% 50%;
+  --info-foreground: 0 0% 100%;
+
+  --border: 0 0% 18%;
+  --input: 0 0% 18%;
+  --ring: 214 100% 48%;
+
+  --radius: 4px;
+
+  --button-outline: rgba(255,255,255, .15);
+  --badge-outline: rgba(255,255,255, .08);
+  --elevate-1: rgba(255,255,255, .04);
+  --elevate-2: rgba(255,255,255, .09);
+
+  --sidebar: 0 0% 3%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 0 0% 18%;
+  --sidebar-primary: 0 0% 100%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 0 0% 10%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 214 100% 48%;
+}
+
+.ui-vercel body {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h40v40H0z' fill='none'/%3E%3Cpath d='M0 40V0M40 40V0' stroke='%23222' stroke-width='0.5'/%3E%3Cpath d='M0 0h40M0 40h40' stroke='%23222' stroke-width='0.5'/%3E%3C/svg%3E");
+  background-size: 40px 40px;
+}
+
+.ui-vercel h1, .ui-vercel h2, .ui-vercel h3,
+.ui-vercel h4, .ui-vercel h5, .ui-vercel h6 {
+  font-family: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace, system-ui;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.ui-vercel .glass-panel {
+  background: #000 !important;
+  border-color: #222 !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Vercel: card components — thin border, no shadow, sharp corners */
+.ui-vercel .rounded-xl,
+.ui-vercel .rounded-2xl,
+.ui-vercel .rounded-3xl {
+  border-radius: 4px !important;
+  border-color: #333 !important;
+}
+
+.ui-vercel .shadow,
+.ui-vercel .shadow-sm,
+.ui-vercel .shadow-md,
+.ui-vercel .shadow-lg,
+.ui-vercel .shadow-xl,
+.ui-vercel .shadow-2xl {
+  box-shadow: none !important;
+}
+
+/* Vercel: suppress dark variant to keep fixed scheme */
+.ui-vercel.dark {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+}
+
+/* ===== Apple Theme ===== */
+.ui-apple {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 11%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 11%;
+  --card-border: 0 0% 92%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 11%;
+  --popover-border: 0 0% 92%;
+
+  --primary: 212 100% 44%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 0 0% 95%;
+  --secondary-foreground: 0 0% 11%;
+
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 40%;
+
+  --accent: 212 100% 44%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 11%;
+
+  --info: 212 100% 44%;
+  --info-foreground: 0 0% 100%;
+
+  --border: 0 0% 92%;
+  --input: 0 0% 92%;
+  --ring: 212 100% 44%;
+
+  --radius: 12px;
+
+  --button-outline: rgba(0,0,0, .08);
+  --badge-outline: rgba(0,0,0, .04);
+  --elevate-1: rgba(0,0,0, .02);
+  --elevate-2: rgba(0,0,0, .06);
+
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 0 0% 11%;
+  --sidebar-border: 0 0% 92%;
+  --sidebar-primary: 212 100% 44%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 0 0% 95%;
+  --sidebar-accent-foreground: 0 0% 11%;
+  --sidebar-ring: 212 100% 44%;
+}
+
+.ui-apple .glass-panel {
+  background: rgba(255,255,255,0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06) !important;
+}
+
+.ui-apple h1, .ui-apple h2, .ui-apple h3,
+.ui-apple h4, .ui-apple h5, .ui-apple h6 {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+/* Apple: pill-shaped primary and default buttons only */
+.ui-apple button.bg-primary,
+.ui-apple button.bg-foreground,
+.ui-apple a > button,
+.ui-apple button[class*="rounded-full"] {
+  border-radius: 980px !important;
+}
+
+/* Apple: navbar ultra-thin (h-12 instead of h-16) */
+.ui-apple header > div {
+  height: 3rem !important;
+}
+
+/* Apple: hero/homepage heading scale — larger */
+.ui-apple h1 {
+  font-size: clamp(3.5rem, 8vw, 6rem) !important;
+  line-height: 1.05 !important;
+}
+
+/* Apple: cards — no visible border, soft shadow only (scoped to card components) */
+.ui-apple .rounded-xl,
+.ui-apple .rounded-2xl,
+.ui-apple .rounded-3xl {
+  border-color: transparent !important;
+}
+
+.ui-apple .shadow-lg,
+.ui-apple .shadow-xl,
+.ui-apple .shadow-2xl {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04) !important;
+}
+
+.ui-apple .shadow {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04) !important;
+}
+
+/* Apple: suppress dark variant to keep fixed light scheme */
+.ui-apple.dark {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 11%;
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 40%;
+  --border: 0 0% 92%;
+}
+
 @layer base {
   * {
     @apply border-border;
