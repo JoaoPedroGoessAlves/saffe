@@ -2,7 +2,13 @@ import { useAuth } from "@workspace/replit-auth-web";
 import { Redirect } from "wouter";
 import { Loader2 } from "lucide-react";
 
+const DEV_MODE = import.meta.env.DEV;
+
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  if (DEV_MODE) {
+    return <>{children}</>;
+  }
+
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
