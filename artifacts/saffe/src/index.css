@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -51,7 +51,7 @@
   --color-info-foreground: hsl(var(--info-foreground));
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Outfit', sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -182,11 +182,12 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-accent/30 selection:text-accent-foreground;
+    font-weight: 400;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Outfit', sans-serif;
-    font-weight: 300;
-    letter-spacing: -0.02em;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif !important;
+    font-weight: 200 !important;
+    letter-spacing: -0.03em;
   }
 }
 
@@ -221,6 +222,7 @@ button[class*="rounded-full"] {
 h1 {
   font-size: clamp(2.5rem, 6vw, 5rem) !important;
   line-height: 1.05 !important;
+  font-weight: 200 !important;
 }
 
 /* === Apple card: soft shadow, no border === */
